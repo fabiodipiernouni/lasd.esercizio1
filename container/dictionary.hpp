@@ -50,11 +50,11 @@ namespace lasd {
         // Specific member functions
 
         // type Insert(argument) specifiers; // Copy of the value
-        bool Insert(const Data &) = 0;
+        virtual bool Insert(const Data &) = 0;
         // type Insert(argument) specifiers; // Move of the value
-        bool Insert(Data &&) = 0;
+        virtual bool Insert(Data &&) = 0;
         // type Remove(argument) specifiers;
-        bool Remove(const Data &) = 0;
+        virtual bool Remove(const Data &) = 0;
 
         // type InsertAll(argument) specifiers; // Copy of the value; From TraversableContainer; True if all are inserted
         virtual inline bool InsertAll(const TraversableContainer<Data> &);
