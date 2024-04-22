@@ -12,59 +12,68 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-template <typename Data>
-class DictionaryContainer {
-  // Must extend TestableContainer<Data>
+    template<typename Data>
+    class DictionaryContainer : virtual public TestableContainer<Data> {
 
-private:
 
-  // ...
+    private:
 
-protected:
+        // ...
 
-  // ...
+    protected:
 
-public:
+        // ...
 
-  // Destructor
-  // ~DictionaryContainer() specifiers
+    public:
 
-  /* ************************************************************************ */
+        // Destructor
+        virtual inline ~DictionaryContainer() = default;
 
-  // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
+        /* ************************************************************************ */
 
-  // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+        // Copy assignment
+        DictionaryContainer<Data> &operator=(const DictionaryContainer<Data> &) = delete;
 
-  /* ************************************************************************ */
+        // Move assignment
+        DictionaryContainer<Data> &operator=(DictionaryContainer<Data> &&)
 
-  // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
+        noexcept = delete;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Specific member functions
+        // Comparison operators
+        bool operator==(const DictionaryContainer<Data> &) const noexcept = delete; // Comparison of abstract types is not possible.
+        bool operator!=(const DictionaryContainer<Data> &) const noexcept = delete; // Comparison of abstract types is not possible.
 
-  // type Insert(argument) specifiers; // Copy of the value
-  // type Insert(argument) specifiers; // Move of the value
-  // type Remove(argument) specifiers;
+        /* ************************************************************************ */
 
-  // type InsertAll(argument) specifiers; // Copy of the value; From TraversableContainer; True if all are inserted
-  // type InsertAll(argument) specifiers; // Move of the value; From MappableContainer; True if all are inserted
-  // type RemoveAll(argument) specifiers; // From TraversableContainer; True if all are removed
+        // Specific member functions
 
-  // type InsertSome(argument) specifiers; // Copy of the value; From TraversableContainer; True if some is inserted
-  // type InsertSome(argument) specifiers; // Move of the value; From MappableContainer; True if some is inserted
-  // type RemoveSome(argument) specifiers; // From TraversableContainer; True if some is removed
+        // type Insert(argument) specifiers; // Copy of the value
+        bool Insert(const Data &) = 0;
+        // type Insert(argument) specifiers; // Move of the value
+        bool Insert(Data &&) = 0;
+        // type Remove(argument) specifiers;
+        bool Remove(const Data &) = 0;
 
-};
+        // type InsertAll(argument) specifiers; // Copy of the value; From TraversableContainer; True if all are inserted
+        virtual inline bool InsertAll(const TraversableContainer<Data> &);
+        // type InsertAll(argument) specifiers; // Move of the value; From MappableContainer; True if all are inserted
+        virtual inline bool InsertAll(MappableContainer<Data> &&);
+        // type RemoveAll(argument) specifiers; // From TraversableContainer; True if all are removed
+        virtual inline bool RemoveAll(const TraversableContainer<Data> &);
+
+        // type InsertSome(argument) specifiers; // Copy of the value; From TraversableContainer; True if some is inserted
+        virtual inline bool InsertSome(const TraversableContainer<Data> &);
+        // type InsertSome(argument) specifiers; // Move of the value; From MappableContainer; True if some is inserted
+        virtual inline bool InsertSome(MappableContainer<Data> &&);
+        // type RemoveSome(argument) specifiers; // From TraversableContainer; True if some is removed
+        virtual inline bool RemoveSome(const TraversableContainer<Data> &);
+
+    };
 
 /* ************************************************************************** */
 
 }
-
-#include "dictionary.cpp"
 
 #endif

@@ -12,44 +12,56 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-template <typename Data>
-class TestableContainer {
-  // Must extend Container
+    template<typename Data>
+    class TestableContainer : virtual public Container {
 
-private:
 
-  // ...
+    private:
 
-protected:
+        // ...
 
-  // ...
+    protected:
 
-public:
+        // ...
+        inline TestableContainer() = default;
 
-  // Destructor
-  // ~TestableContainer() specifiers
+    public:
 
-  /* ************************************************************************ */
+        // Destructor
+        virtual inline ~TestableContainer() = default;
 
-  // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
+        /* ************************************************************************ */
 
-  // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+        // Copy assignment
+        TestableContainer<Data> &operator=(const TestableContainer<Data> &)
 
-  /* ************************************************************************ */
+        noexcept = delete; // Copy assignment of abstract types is not possible.
 
-  // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
 
-  /* ************************************************************************ */
+        // Move assignment
+        TestableContainer<Data> &operator=(TestableContainer<Data> &&)
 
-  // Specific member function
+        noexcept = delete; // Move assignment of abstract types is not possible.
 
-  // type Exists(argument) specifiers; // (concrete function should not throw exceptions)
+        /* ************************************************************************ */
 
-};
+        // Comparison operators
+        bool operator==(const TestableContainer<Data> &) const
+
+        noexcept = delete; // Comparison of abstract types is not possible.
+
+        bool operator!=(const TestableContainer<Data> &) const
+
+        noexcept = delete; // Comparison of abstract types is not possible.
+
+        /* ************************************************************************ */
+
+        // Specific member function
+
+        // type Exists(argument) specifiers; // (concrete function should not throw exceptions)
+        bool Exists(const Data &) const noexcept = 0;
+
+    };
 
 /* ************************************************************************** */
 
