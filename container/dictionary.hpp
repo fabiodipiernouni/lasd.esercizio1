@@ -6,6 +6,7 @@
 
 #include "mappable.hpp"
 
+
 /* ************************************************************************** */
 
 namespace lasd {
@@ -22,7 +23,7 @@ namespace lasd {
 
     protected:
 
-        // ...
+        inline DictionaryContainer<Data>(): TestableContainer<Data>() = default;
 
     public:
 

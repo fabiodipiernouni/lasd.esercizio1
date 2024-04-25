@@ -6,6 +6,7 @@
 
 #include "container.hpp"
 
+
 /* ************************************************************************** */
 
 namespace lasd {
@@ -16,14 +17,9 @@ namespace lasd {
     class TestableContainer : virtual public Container {
 
 
-    private:
-
-        // ...
-
     protected:
 
-        // ...
-        inline TestableContainer() = default;
+        inline TestableContainer<Data>(): Container() = default;
 
     public:
 

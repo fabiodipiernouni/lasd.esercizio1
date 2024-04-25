@@ -6,7 +6,8 @@ namespace lasd {
 
 /*** PreOrderMappableContainer class ***/
 
-    void PreOrderMappableContainer::Map(MappableContainer::MapFun mapFun) {
+    template<typename Data>
+    void PreOrderMappableContainer<Data>::Map(MappableContainer<Data>::MapFun mapFun) {
         PreOrderMap(mapFun);
     }
 
@@ -14,7 +15,8 @@ namespace lasd {
 
 /*** PostOrderMappableContainer class ***/
 
-    void PostOrderMappableContainer::Map(MappableContainer::MapFun mapFun) {
+    template<typename Data>
+    void PostOrderMappableContainer<Data>::Map(MappableContainer<Data>::MapFun mapFun) {
         PostOrderMap(mapFun);
     }
 
@@ -22,15 +24,17 @@ namespace lasd {
 
     /*** InOrderMappableContainer class ***/
 
-    void InOrderMappableContainer::Map(MappableContainer::MapFun mapFun) {
+    template<typename Data>
+    void InOrderMappableContainer<Data>::Map(MappableContainer<Data>::MapFun mapFun) {
         InOrderMap(mapFun);
     }
 
 /* ************************************************************************** */
 
-    /*** BreadthOrderMappableContainer class ***/
+    /*** BreadthMappableContainer class ***/
 
-    void BreadthOrderMappableContainer::Map(MappableContainer::MapFun mapFun) {
-        BreadthOrderMap(mapFun);
+    template<typename Data>
+    void BreadthMappableContainer<Data>::Map(MappableContainer<Data>::MapFun mapFun) {
+        BreadthMap(mapFun);
     }
 }

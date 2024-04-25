@@ -14,41 +14,32 @@
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class MappableContainer : virtual public TraversableContainer<Data> {
 
+     protected:
+        inline MappableContainer<Data>() : TraversableContainer<Data>() = default;
 
-    private:
-
-    protected:
-
-        inline MappableContainer() = default;
-
-    public:
-
+     public:
         // Destructor
-        inline virtual ~
-
-        MappableContainer() = default;
-
+        inline virtual ~MappableContainer() = default;
 
         /* ************************************************************************ */
 
         // Copy assignment
-        MappableContainer<Data> &operator=(const MappableContainer<Data> &) = delete;
+        MappableContainer<Data> &operator=(const MappableContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        MappableContainer<Data> &operator=(MappableContainer<Data> &&)
-        = delete;
+        MappableContainer<Data> &operator=(MappableContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const MappableContainer<Data> &) const = delete;
+        bool operator==(const MappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
-        bool operator!=(const MappableContainer<Data> &) const = delete;
+        bool operator!=(const MappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -57,49 +48,34 @@ namespace lasd {
         using MapFun = std::function<void(Data &)>;
 
         virtual void Map(MapFun) = 0;
-
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class PreOrderMappableContainer : public MappableContainer<Data>, public PreOrderTraversableContainer<Data> {
 
-
-    protected:
-
+     protected:
         // constructor
-        inline PreOrderMappableContainer() : MappableContainer<Data>(), PreOrderTraversableContainer<Data>()
+        inline PreOrderMappableContainer<Data>() : MappableContainer<Data>(), PreOrderTraversableContainer<Data>() = default;
 
-        = default;
-
-    public:
-
+     public:
         // Destructor
         inline virtual ~PreOrderMappableContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        PreOrderMappableContainer<Data> &
-        operator=(
-                const PreOrderMappableContainer<Data> &) = delete; // Copy assignment of abstract types is not possible.
+        PreOrderMappableContainer<Data> &operator=(const PreOrderMappableContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        PreOrderMappableContainer<Data> &
-        operator=(PreOrderMappableContainer<Data> &&) = delete; // Move assignment of abstract types is not possible.
+        PreOrderMappableContainer<Data> &operator=(PreOrderMappableContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool
-        operator==(
-                const PreOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
-        bool
-        operator!=(
-                const PreOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
-
+        bool operator==(const PreOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const PreOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -114,46 +90,35 @@ namespace lasd {
 
         // Specific member function (inherited from MappableContainer)
 
-        // type Map(argument) specifiers; // Override MappableContainer member
         void Map(MapFun) override;
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class PostOrderMappableContainer : public MappableContainer<Data>, public PostOrderTraversableContainer<Data> {
 
-    protected:
-
+     protected:
         // constructor
-        inline PostOrderMappableContainer() : MappableContainer<Data>(), PostOrderTraversableContainer<Data>()
+        inline PostOrderMappableContainer<Data>() : MappableContainer<Data>(), PostOrderTraversableContainer<Data>() = default;
 
-        = default;
-
-    public:
-
+     public:
         // Destructor
         inline virtual ~PostOrderMappableContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        PostOrderMappableContainer<Data> &
-        operator=(
-                const PostOrderMappableContainer<Data> &) = delete; // Copy assignment of abstract types is not possible.
+        PostOrderMappableContainer<Data> &operator=(const PostOrderMappableContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        PostOrderMappableContainer<Data> &
-        operator=(PostOrderMappableContainer<Data> &&) = delete; // Move assignment of abstract types is not possible.
+        PostOrderMappableContainer<Data> &operator=(PostOrderMappableContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(
-                const PostOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
-        bool operator!=(
-                const PostOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
+        bool operator==(const PostOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const PostOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -165,48 +130,35 @@ namespace lasd {
 
         /* ************************************************************************ */
 
-        // Specific member function (inherited from MappableContainer)
-
         void Map(MapFun) override;
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class InOrderMappableContainer : public MappableContainer<Data>, public InOrderTraversableContainer<Data> {
 
-    protected:
-
+     protected:
         // constructor
-        inline InOrderMappableContainer() : MappableContainer<Data>(), InOrderTraversableContainer<Data>()
+        inline InOrderMappableContainer<Data>() : MappableContainer<Data>(), InOrderTraversableContainer<Data>() = default;
 
-        = default;
-
-    public:
-
+     public:
         // Destructor
         inline virtual ~InOrderMappableContainer() = default;
 
         /* ************************************************************************ */
 
         // Copy assignment
-        InOrderMappableContainer<Data> &
-        operator=(
-                const InOrderMappableContainer<Data> &) = delete; // Copy assignment of abstract types is not possible.
+        InOrderMappableContainer<Data> &operator=(const InOrderMappableContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        InOrderMappableContainer<Data> &
-        operator=(InOrderMappableContainer<Data> &&) = delete; // Move assignment of abstract types is not possible.
+        InOrderMappableContainer<Data> &operator=(InOrderMappableContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool
-        operator==(
-                const InOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
-        bool
-        operator!=(
-                const InOrderMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
+        bool operator==(const InOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const InOrderMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -214,56 +166,39 @@ namespace lasd {
 
         using typename MappableContainer<Data>::MapFun;
 
-        // type InOrderMap(argument) specifiers;
         virtual void InOrderMap(MapFun) = 0;
 
         /* ************************************************************************ */
 
-        // Specific member function (inherited from MappableContainer)
-
-        // type Map(argument) specifiers; // Override MappableContainer member
         void Map(MapFun) override;
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class BreadthMappableContainer : public MappableContainer<Data>, public BreadthTraversableContainer<Data> {
 
-    protected:
-
+     protected:
         // constructor
-        inline BreadthMappableContainer() : MappableContainer<Data>(), BreadthTraversableContainer<Data>()
+        inline BreadthMappableContainer<Data>() : MappableContainer<Data>(), BreadthTraversableContainer<Data>() = default;
 
-        = default;
-
-    public:
-
+     public:
         // Destructor
         inline virtual ~BreadthMappableContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        BreadthMappableContainer<Data> &
-        operator=(
-                const BreadthMappableContainer<Data> &) = delete; // Copy assignment of abstract types is not possible.
+        BreadthMappableContainer<Data> &operator=(const BreadthMappableContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        BreadthMappableContainer<Data> &
-        operator=(BreadthMappableContainer<Data> &&) = delete; // Move assignment of abstract types is not possible.
-
+        BreadthMappableContainer<Data> &operator=(BreadthMappableContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool
-        operator==(
-                const BreadthMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
-        bool
-        operator!=(
-                const BreadthMappableContainer<Data> &) const = delete; // Comparison of abstract types is not possible.
+        bool operator==(const BreadthMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const BreadthMappableContainer<Data> &) const = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -271,20 +206,17 @@ namespace lasd {
 
         using typename MappableContainer<Data>::MapFun;
 
-        // type BreadthMap(argument) specifiers;
         virtual void BreadthMap(MapFun) = 0;
 
         /* ************************************************************************ */
 
         // Specific member function (inherited from MappableContainer)
 
-        // type Map(argument) specifiers; // Override MappableContainer member
         void Map(MapFun) override;
-
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-}
+}// namespace lasd
 
 #endif
