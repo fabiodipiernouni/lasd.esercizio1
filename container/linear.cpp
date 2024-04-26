@@ -28,7 +28,7 @@ namespace lasd {
     template<typename Data>
     Data &LinearContainer<Data>::Front() {
         if (Size() == 0)
-            throw std::out_of_range("The container is empty, there is no front element");
+            throw std::length_error("The container is empty, there is no front element");
 
         return (*this)[0];
     }
@@ -36,7 +36,7 @@ namespace lasd {
     template<typename Data>
     const Data &LinearContainer<Data>::Front() const {
         if (Size() == 0)
-            throw std::out_of_range("The container is empty, there is no front element");
+            throw std::length_error("The container is empty, there is no front element");
 
         return (*this)[0];
     }
@@ -44,7 +44,7 @@ namespace lasd {
     template<typename Data>
     Data &LinearContainer<Data>::Back() {
         if (Size() == 0)
-            throw std::out_of_range("The container is empty, there is no back element");
+            throw std::length_error("The container is empty, there is no back element");
 
         return (*this)[Size() - 1];
     }
@@ -52,7 +52,7 @@ namespace lasd {
     template<typename Data>
     const Data &LinearContainer<Data>::Back() const {
         if (Size() == 0)
-            throw std::out_of_range("The container is empty, there is no back element");
+            throw std::length_error("The container is empty, there is no back element");
 
         return (*this)[Size() - 1];
     }

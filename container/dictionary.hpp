@@ -6,27 +6,19 @@
 
 #include "mappable.hpp"
 
-
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class DictionaryContainer : virtual public TestableContainer<Data> {
 
+     protected:
+        inline DictionaryContainer<Data>() : TestableContainer<Data>() = default;
 
-    private:
-
-        // ...
-
-    protected:
-
-        inline DictionaryContainer<Data>(): TestableContainer<Data>() = default;
-
-    public:
-
+     public:
         // Destructor
         virtual inline ~DictionaryContainer() = default;
 
@@ -38,13 +30,13 @@ namespace lasd {
         // Move assignment
         DictionaryContainer<Data> &operator=(DictionaryContainer<Data> &&)
 
-        noexcept = delete;
+            noexcept = delete;
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const DictionaryContainer<Data> &) const noexcept = delete; // Comparison of abstract types is not possible.
-        bool operator!=(const DictionaryContainer<Data> &) const noexcept = delete; // Comparison of abstract types is not possible.
+        bool operator==(const DictionaryContainer<Data> &) const noexcept = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const DictionaryContainer<Data> &) const noexcept = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -70,11 +62,10 @@ namespace lasd {
         virtual inline bool InsertSome(MappableContainer<Data> &&);
         // type RemoveSome(argument) specifiers; // From TraversableContainer; True if some is removed
         virtual inline bool RemoveSome(const TraversableContainer<Data> &);
-
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-}
+}// namespace lasd
 
 #endif

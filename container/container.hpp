@@ -6,50 +6,35 @@
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     class Container {
 
-    private:
-
-        // ...
-
-    protected:
-
+     protected:
         unsigned long int size;
 
         /* ************************************************************************ */
 
         // Default constructor
-        inline Container() : size(0) { };
+        inline Container() : size(0){};
 
-
-    public:
-
+     public:
         // Destructor
         virtual inline ~Container() = default;
 
         /* ************************************************************************ */
 
         // Copy assignment
-        Container &operator=(const Container &)
-
-        noexcept = delete; // Copy assignment of abstract types is not possible.
+        Container &operator=(const Container &) noexcept = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        Container &operator=(Container &&)
-
-        noexcept = delete; // Move assignment of abstract types is not possible.
+        Container &operator=(Container &&) noexcept = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const Container &) const
-
-        noexcept = delete; // Comparison of abstract types is not possible.
-        bool operator!=(const Container &) const
-
-        noexcept = delete; // Comparison of abstract types is not possible.
+        bool operator==(const Container &) const noexcept = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const Container &) const noexcept = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
 
@@ -57,115 +42,79 @@ namespace lasd {
 
         // type Empty() specifiers; // (concrete function should not throw exceptions)
 
-        inline bool Empty() const
-
-        noexcept { return size == 0; }
+        inline bool Empty() const noexcept { return size == 0; }
 
         // type Size() specifiers; // (concrete function should not throw exceptions)
-        inline unsigned long int Size() const
-
-        noexcept { return size; }
-
+        inline unsigned long int Size() const noexcept { return size; }
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     class ClearableContainer : virtual public Container {
 
-    protected:
+     protected:
         inline ClearableContainer() = default;
 
-    public:
-
+     public:
         // Destructor
         virtual inline ~ClearableContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        ClearableContainer &operator=(const ClearableContainer &)
-
-        noexcept = delete; // Copy assignment of abstract types is not possible.
-
+        ClearableContainer &operator=(const ClearableContainer &) noexcept = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        ClearableContainer &operator=(ClearableContainer &&)
-
-        noexcept = delete;
+        ClearableContainer &operator=(ClearableContainer &&) noexcept = delete;
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const ClearableContainer &) const
-
-        noexcept = delete; // Comparison of abstract types is not possible.
-        bool operator!=(const ClearableContainer &) const
-
-        noexcept = delete; // Comparison of abstract types is not possible.
+        bool operator==(const ClearableContainer &) const noexcept = delete;// Comparison of abstract types is not possible.
+        bool operator!=(const ClearableContainer &) const noexcept = delete;// Comparison of abstract types is not possible.
 
         // Specific member functions
 
         // type Clear() specifiers;
-        virtual void Clear()
-
-        noexcept = 0;
+        virtual void Clear() noexcept = 0;
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     class ResizableContainer : virtual public ClearableContainer {
 
-    protected:
-
+     protected:
         inline ResizableContainer() = default;
 
-
-    public:
-
+     public:
         // Destructor
         virtual inline ~ResizableContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        ResizableContainer &operator=(const ResizableContainer &)
-
-        noexcept = delete; // Copy assignment of abstract types is not possible.
-
+        ResizableContainer &operator=(const ResizableContainer &) noexcept = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        ResizableContainer &operator=(ResizableContainer &&)
-
-        noexcept = delete; // Move assignment of abstract types is not possible.
+        ResizableContainer &operator=(ResizableContainer &&) noexcept = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const ResizableContainer &) const
+        bool operator==(const ResizableContainer &) const noexcept = delete;// Comparison of abstract types is not possible.
 
-        noexcept = delete; // Comparison of abstract types is not possible.
-
-        bool operator!=(const ResizableContainer &) const
-
-        noexcept = delete; // Comparison of abstract types is not possible.
+        bool operator!=(const ResizableContainer &) const noexcept = delete;// Comparison of abstract types is not possible.
 
         /* ************************************************************************ */
-
-        // Specific member functions
 
         virtual void Resize(unsigned long int) noexcept = 0;
 
         /* ************************************************************************ */
 
-        // Specific member function (inherited from ClearableContainer)
-
         //because the Clear in ClearableContainer is marked with noexcept, this function must be marked with noexcept as well
         inline void Clear() noexcept override { Resize(0); }
-
     };
 
-}
+}// namespace lasd
 
 #endif
