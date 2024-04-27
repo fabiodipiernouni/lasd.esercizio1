@@ -13,47 +13,52 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class Queue {
-  // Must extend ClearableContainer
-
-private:
-
-  // ...
+class Queue: public ClearableContainer {
 
 protected:
 
-  // ...
+  inline Queue<Data>(): ClearableContainer() = default;
 
 public:
 
   // Destructor
-  // ~Queue() specifiers
+  virtual ~Queue() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
+  Queue& operator=(const Queue&) noexcept = delete;
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+  Queue& operator=(Queue&&) noexcept = delete;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
+  bool operator==(const Queue&) const noexcept = delete;
+  bool operator!=(const Queue&) const noexcept = delete;
 
   /* ************************************************************************ */
 
   // Specific member functions
 
   // type Head() specifiers; // (non-mutable version; concrete function must throw std::length_error when empty)
+  virtual Data const& Head() const = 0;
   // type Head() specifiers; // (mutable version; concrete function must throw std::length_error when empty)
+  virtual Data& Head() = 0;
   // type Dequeue() specifiers; // (concrete function must throw std::length_error when empty)
+  virtual void Dequeue() = 0;
   // type HeadNDequeue() specifiers; // (concrete function must throw std::length_error when empty)
-  // type Enqueue(argument) specifiers; // Copy of the value
-  // type Enqueue(argument) specifiers; // Move of the value
+  virtual inline Data HeadNDequeue() {
+    Data temp = Head();
+    Dequeue();
+    return temp;
+  };
 
+  // type Enqueue(argument) specifiers; // Copy of the value
+  virtual void Enqueue(const Data&) = 0;
+  // type Enqueue(argument) specifiers; // Move of the value
+  virtual void Enqueue(Data&&) = 0;
 };
 
 /* ************************************************************************** */

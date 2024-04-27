@@ -78,31 +78,9 @@ namespace lasd {
         Node *head = nullptr;
         Node *tail = nullptr;
 
-        // Auxiliary functions
-        void Traverse(TraverseFun, Node&) const;
-        void PostOrderTraverse(TraverseFun, Node&) const;
-        void Map(MapFun, Node&);
-        void PostOrderMap(MapFun, Node&);
-
-
      public:
         // Default constructor
         inline List<Data>() : ClearableContainer(), LinearContainer<Data>(), DictionaryContainer<Data>() = default;
-
-        /* ************************************************************************ */
-
-        // Specific constructor
-        inline List<Data>(const TraversableContainer<Data> &tc) {
-            tc.Traverse([this](const Data &val) {
-                InsertAtBack(val);
-            });
-        };
-
-        inline List<Data>(MappableContainer<Data> &&mc) {
-            mc.Map([this](Data &val) {
-                InsertAtBack(std::move(val));
-            });
-        };
 
         /* ************************************************************************ */
 
@@ -236,6 +214,13 @@ namespace lasd {
         // Specific member function (inherited from PostOrderMappableContainer)
 
         virtual void PostOrderMap(MapFun) override;
+
+     protected:
+        // Auxiliary functions
+        void Traverse(TraverseFun, Node &) const;
+        void PostOrderTraverse(TraverseFun, Node &) const;
+        void Map(MapFun, Node &);
+        void PostOrderMap(MapFun, Node &);
     };
 
     /* ************************************************************************** */

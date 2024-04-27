@@ -31,6 +31,7 @@ namespace lasd {
         return *this;
     };
 
+    template<typename Data>
     bool List<Data>::operator==(const List<Data> &l) const noexcept {
         if (size != l.size) {
             return false;
@@ -51,21 +52,25 @@ namespace lasd {
         return true;
     };
 
+    template<typename Data>
     bool List<Data>::operator!=(const List<Data> &l) const noexcept {
         return !operator==(l);
     }
 
-    virtual void List<Data>::InsertAtFront(const Data &val) {
+    template<typename Data>
+    void List<Data>::InsertAtFront(const Data &val) {
         head = new Node(val, head);
         this.size++;
     };
 
-    virtual void List<Data>::InsertAtFront(Data &&val) {
+    template<typename Data>
+    void List<Data>::InsertAtFront(Data &&val) {
         head = new Node(std::move(val), head);
         this.size++;
     };
 
-    virtual void List<Data>::RemoveFromFront() {
+    template<typename Data>
+    void List<Data>::RemoveFromFront() {
         if (Empty()) {
             throw std::length_error("Cannot remove from an empty list");
         }
@@ -79,7 +84,8 @@ namespace lasd {
         }
     };
 
-    virtual Data List<Data>::FrontNRemove() {
+    template<typename Data>
+    Data List<Data>::FrontNRemove() {
         if (Empty()) {
             throw std::length_error("Cannot remove from an empty list");
         }
@@ -89,7 +95,8 @@ namespace lasd {
         return temp;
     };
 
-    virtual void List<Data>::InsertAtBack(const Data &val) {
+    template<typename Data>
+    void List<Data>::InsertAtBack(const Data &val) {
         if (Empty()) {
             head = new Node(val);
             tail = head;
@@ -101,7 +108,8 @@ namespace lasd {
         this.size++;
     };
 
-    virtual void List<Data>::InsertAtBack(Data &&val) {
+    template<typename Data>
+    void List<Data>::InsertAtBack(Data &&val) {
         if (Empty()) {
             head = new Node(std::move(val));
             tail = head;
@@ -113,23 +121,27 @@ namespace lasd {
         this.size++;
     };
 
-    virtual void List<Data>::Clear() noexcept override {
+    template<typename Data>
+    void List<Data>::Clear() noexcept {
         while (!Empty()) {
             RemoveFromFront();
         }
     };
 
-    virtual bool List<Data>::Insert(const Data &val) override {
+    template<typename Data>
+    bool List<Data>::Insert(const Data &val) {
         InsertAtBack(val);
         return true;
     };
 
-    virtual bool List<Data>::Insert(Data &&val) override {
+    template<typename Data>
+    bool List<Data>::Insert(Data &&val) {
         InsertAtBack(std::move(val));
         return true;
     }
 
-    virtual bool List<Data>::Remove(const Data &val) override {
+    template<typename Data>
+    bool List<Data>::Remove(const Data &val) {
         if (Empty()) { return false; }
 
         Node *temp = head;
@@ -153,8 +165,8 @@ namespace lasd {
         return false;
     }
 
-
-    virtual const Data &List<Data>::operator[](const unsigned long idx) const override {
+    template<typename Data>
+    const Data &List<Data>::operator[](const unsigned long idx) const {
         if (Empty()) {
             throw std::out_of_range("Cannot access an empty list");
         }
@@ -175,7 +187,8 @@ namespace lasd {
         return temp->data;
     }
 
-    virtual Data &List<Data>::operator[](const unsigned long idx) override {
+    template<typename Data>
+    Data &List<Data>::operator[](const unsigned long idx) {
         if (Empty()) {
             throw std::out_of_range("Cannot access an empty list");
         }
@@ -196,7 +209,8 @@ namespace lasd {
         return temp->data;
     }
 
-    virtual const Data &List<Data>::Front() const override {
+    template<typename Data>
+    const Data &List<Data>::Front() const {
         if (Empty()) {
             throw std::length_error("Cannot access an empty list");
         }
@@ -204,7 +218,8 @@ namespace lasd {
         return head->data;
     }
 
-    virtual Data &List<Data>::Front() override {
+    template<typename Data>
+    Data &List<Data>::Front() {
         if (Empty()) {
             throw std::length_error("Cannot access an empty list");
         }
@@ -212,7 +227,8 @@ namespace lasd {
         return head->data;
     }
 
-    virtual const Data &List<Data>::Back() const override {
+    template<typename Data>
+    const Data &List<Data>::Back() const {
         if (Empty()) {
             throw std::length_error("Cannot access an empty list");
         }
@@ -220,7 +236,8 @@ namespace lasd {
         return tail->data;
     }
 
-    virtual Data &List<Data>::Back() override {
+    template<typename Data>
+    Data &List<Data>::Back() {
         if (Empty()) {
             throw std::length_error("Cannot access an empty list");
         }
@@ -228,6 +245,7 @@ namespace lasd {
         return tail->data;
     }
 
+    template<typename Data>
     void List<Data>::Traverse(TraverseFun fun, Node& start) const {
         Node *temp = start ? start : head;
         while (temp != nullptr) {
@@ -236,10 +254,12 @@ namespace lasd {
         }
     }
 
-    virtual void List<Data>::PreOrderTraverse(TraverseFun fun) const override {
+    template<typename Data>
+    void List<Data>::PreOrderTraverse(TraverseFun fun) const {
         Traverse(fun, head);
     }
 
+    template<typename Data>
     void List<Data>::PostOrderTraverse(TraverseFun fun, Node& from) const {
         if (from == nullptr) {
             return;
@@ -249,10 +269,12 @@ namespace lasd {
         fun(from->data);
     }
 
-    virtual void List<Data>::PostOrderTraverse(TraverseFun fun) const override {
+    template<typename Data>
+    void List<Data>::PostOrderTraverse(TraverseFun fun) const {
         PostOrderTraverse(fun, head);
     }
 
+    template<typename Data>
     void List<Data>::Map(MapFun mapFun, Node& start) {
         Node *temp = start;
         while (temp != nullptr) {
@@ -261,15 +283,18 @@ namespace lasd {
         }
     }
 
-    virtual void List<Data>::Map(MapFun mapFun) override {
+    template<typename Data>
+    void List<Data>::Map(MapFun mapFun) {
         Map(mapFun, head);
     }
 
-    virtual void List<Data>::PreOrderMap(MapFun mapFun) override {
+    template<typename Data>
+    void List<Data>::PreOrderMap(MapFun mapFun) {
         Map(mapFun, head);
     }
 
-    void void List<Data>::PostOrderMap(MapFun mapFun, Node& from) {
+    template<typename Data>
+    void List<Data>::PostOrderMap(MapFun mapFun, Node& from) {
         if (from == nullptr) {
             return;
         }
@@ -278,7 +303,8 @@ namespace lasd {
         mapFun(from->data);
     }
 
-    virtual void List<Data>::PostOrderMap(MapFun mapFun) override {
+    template<typename Data>
+    void List<Data>::PostOrderMap(MapFun mapFun) {
         PostOrderMap(mapFun, head);
     }
 
