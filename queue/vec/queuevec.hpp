@@ -4,103 +4,144 @@
 
 /* ************************************************************************** */
 
-#include "../queue.hpp"
 #include "../../vector/vector.hpp"
+#include "../queue.hpp"
 
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-template <typename Data>
-class QueueVec {
-  // Must extend Queue<Data>,
-  //             Vector<Data>
+    template<typename Data>
+    class QueueVec : virtual public Queue<Data>, virtual protected Vector<Data> {
 
-private:
+     private:
+        const unsigned long int chunkSize = 32;
 
-  // ...
+        inline unsigned long int QueueLength() { return (rear - head + size) % size;}
 
-protected:
+        inline unsigned long int QueueSize() { return size; }
 
-  // using Vector<Data>::???;
+     protected:
+        using Vector<Data>::elements;
+        using Vector<Data>::size;
 
-  // ...
+        unsigned long int head = -1;
+        unsigned long int rear = -1;
 
-public:
+     public:
+        // Default constructor
+        inline QueueVec<Data>() : Vector<Data>(chunkSize) = default;
 
-  // Default constructor
-  // QueueVec() specifier;
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific constructor
 
-  // Specific constructor
-  // QueueVec(argument) specifiers; // A stack obtained from a TraversableContainer
-  // QueueVec(argument) specifiers; // A stack obtained from a MappableContainer
+        // A stack obtained from a TraversableContainer
+        inline QueueVec<Data>(const TraversableContainer<Data> &container);
+        // A stack obtained from a MappableContainer
+        inline QueueVec<Data>(const MappableContainer<Data> &container);
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Copy constructor
-  // QueueVec(argument);
+        // Copy constructor
+        // QueueVec(argument);
+        inline QueueVec<Data>(const QueueVec<Data> &queue) : Vector<Data>(queue) {
+            head = queue.head;
+            rear = queue.rear;
+        }
 
-  // Move constructor
-  // QueueVec(argument);
+        // Move constructor
+        // QueueVec(argument);
+        inline QueueVec<Data>(QueueVec<Data> &&queue) noexcept : Vector<Data>(std::move(queue)) {
+            head = queue.head;
+            rear = queue.rear;
+            queue.Clear();
+        }
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Destructor
-  // ~QueueVec() specifier;
+        // Destructor
+        virtual ~QueueVec() = default;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Copy assignment
-  // type operator=(argument);
+        // Copy assignment
+        inline QueueVec &operator=(const QueueVec &queue) {
+            Vector<Data>::operator=(queue);
+            head = queue.head;
+            rear = queue.rear;
+            return *this;
+        }
 
-  // Move assignment
-  // type operator=(argument);
+        // Move assignment
+        inline QueueVec &operator=(QueueVec &&queue) noexcept {
+            Vector<Data>::operator=(std::move(queue));
+            head = queue.head;
+            rear = queue.rear;
+            return *this;
+        }
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+        // Comparison operators
+        bool operator==(const QueueVec &queue) const noexcept;
+        inline bool operator!=(const QueueVec &queue) const noexcept;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Specific member functions (inherited from Queue)
+        // Specific member functions (inherited from Queue)
 
-  // type Head() specifiers; // Override Queue member (non-mutable version; must throw std::length_error when empty)
-  // type Head() specifiers; // Override Queue member (mutable version; must throw std::length_error when empty)
-  // type Dequeue() specifiers; // Override Queue member (must throw std::length_error when empty)
-  // type HeadNDequeue() specifiers; // Override Queue member (must throw std::length_error when empty)
-  // type Enqueue(argument) specifiers; // Override Queue member (copy of the value)
-  // type Enqueue(argument) specifiers; // Override Queue member (move of the value)
+        // Override Queue member (non-mutable version; throw std::length_error when empty)
+        virtual inline Data const &Head() const override;
 
-  /* ************************************************************************ */
+        // Override Queue member (mutable version; throw std::length_error when empty)
+        virtual inline Data &Head() override;
 
-  // Specific member functions (inherited from Container)
+        // Override Queue member (throw std::length_error when empty)
+        virtual void Dequeue() override;
 
-  // type Empty() specifiers; // Override Container member
+        // throw std::length_error when empty
+        using Queue<Data>::HeadNDequeue();// using not needed, just to make code more readable
 
-  // type Size() specifiers; // Override Container member
+        // Override Queue member (copy of the value)
+        virtual void Enqueue(const Data &value) override;
 
-  /* ************************************************************************ */
+        // Override Queue member (move of the value)
+        virtual void Enqueue(Data &&value) override;
 
-  // Specific member function (inherited from ClearableContainer)
+        /* ************************************************************************ */
 
-  // type Clear() specifiers; // Override ClearableContainer member
+        // Specific member functions (inherited from Container)
 
-protected:
+        // Override Container member
+        virtual inline bool Empty() const noexcept override { return head == -1 && rear == -1; }
 
-  // Auxiliary functions, if necessary!
+        // Override Container member
+        virtual inline unsigned long Size() const noexcept override { return QueueLength(); }
 
-};
+        /* ************************************************************************ */
 
-/* ************************************************************************** */
+        // manca resize?
 
-}
+        // Override ClearableContainer member
+        inline void Clear() noexcept override {
+            head = -1; rear = -1; 
+            Vector<Data>::Clear();
+            elements = new Data[chunkSize];
+        }
 
-#include "queuevec.cpp"
+        // Override ResizableContainer member
+        virtual void Resize (const unsigned long newSize) noexcept override;
+
+     protected:
+        // Auxiliary functions, if necessary!
+        inline bool Full() noexcept const { return ((rear + 1) % size) == head; } // if rear circulary incremented is equal to front, means that the queue is full
+    };
+
+    /* ************************************************************************** */
+
+}// namespace lasd
 
 #endif

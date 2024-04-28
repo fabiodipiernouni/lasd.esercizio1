@@ -42,13 +42,16 @@ public:
 
   // Specific member functions
 
-  // type Head() specifiers; // (non-mutable version; concrete function must throw std::length_error when empty)
+  // not mutable version, throw std::length_error when empty
   virtual Data const& Head() const = 0;
-  // type Head() specifiers; // (mutable version; concrete function must throw std::length_error when empty)
+
+  // mutable version, throw std::length_error when empty
   virtual Data& Head() = 0;
-  // type Dequeue() specifiers; // (concrete function must throw std::length_error when empty)
+
+  // throw std::length_error when empty
   virtual void Dequeue() = 0;
-  // type HeadNDequeue() specifiers; // (concrete function must throw std::length_error when empty)
+
+  // throw std::length_error when empty
   virtual inline Data HeadNDequeue() {
     Data temp = Head();
     Dequeue();

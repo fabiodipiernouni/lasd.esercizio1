@@ -78,17 +78,21 @@ namespace lasd {
 
     template<typename Data>
     void LinearContainer<Data>::Map(typename MappableContainer<Data>::MapFun mf) {
-        Traverse(mf);
+        for (unsigned long i{0}; i < Size(); i++) {
+            mf((*this)[i]);
+        }
     }
 
     template<typename Data>
     void LinearContainer<Data>::PreOrderMap(typename MappableContainer<Data>::MapFun mf) {
-        PreOrderTraverse(mf);
+        Map(mf);
     }
 
     template<typename Data>
     void LinearContainer<Data>::PostOrderMap(typename MappableContainer<Data>::MapFun mf) {
-        PostOrderTraverse(mf);
+        for (unsigned long i{Size() - 1}; i >= 0; i--) {
+            mf((*this)[i]);
+        }
     }
 
     /* ************************************************************************** */
@@ -96,14 +100,12 @@ namespace lasd {
     /*** SortableLinearContainer class ***/
 
     template<typename Data>
-    bool SortableLinearContainer<Data>::operator==(const SortableLinearContainer<Data> &container) const
-        noexcept {
+    bool SortableLinearContainer<Data>::operator==(const SortableLinearContainer<Data> &container) const noexcept {
         return LinearContainer<Data>::operator==(container);
     }
 
     template<typename Data>
-    bool SortableLinearContainer<Data>::operator!=(const SortableLinearContainer<Data> &container) const
-        noexcept {
+    bool SortableLinearContainer<Data>::operator!=(const SortableLinearContainer<Data> &container) const noexcept {
         return LinearContainer<Data>::operator!=(container);
     }
 

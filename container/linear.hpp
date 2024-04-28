@@ -6,53 +6,50 @@
 
 #include "mappable.hpp"
 
-
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
     class LinearContainer
-            : virtual public PreOrderMappableContainer<Data>, virtual public PostOrderMappableContainer<Data> {
+        : virtual public PreOrderMappableContainer<Data>,
+          virtual public PostOrderMappableContainer<Data> {
 
-    protected:
-
+     protected:
         inline LinearContainer() = default;
 
-    public:
-
+     public:
         // Destructor
         inline virtual ~LinearContainer() = default;
-
 
         /* ************************************************************************ */
 
         // Copy assignment
-        LinearContainer<Data> &operator=(const LinearContainer<Data> &) = delete; // Copy assignment of abstract types is not possible.
+        LinearContainer<Data> &operator=(const LinearContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        LinearContainer<Data> &operator=(LinearContainer<Data> &&) = delete; // Move assignment of abstract types is not possible.
+        LinearContainer<Data> &operator=(LinearContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const LinearContainer<Data> &) const noexcept; // Comparison of abstract types is possible.
-        bool operator!=(const LinearContainer<Data> &) const noexcept; // Comparison of abstract types is possible.
+        bool operator==(const LinearContainer<Data> &) const noexcept;// Comparison of abstract types is possible.
+        bool operator!=(const LinearContainer<Data> &) const noexcept;// Comparison of abstract types is possible.
 
         /* ************************************************************************ */
 
         // Specific member functions
 
-        virtual const Data& operator[](const unsigned long) const = 0;
-        virtual Data& operator[](const unsigned long) = 0;
+        virtual const Data &operator[](const unsigned long) const = 0;
+        virtual Data &operator[](const unsigned long) = 0;
 
-        virtual const Data& Front() const;
-        virtual Data& Front();
+        virtual const Data &Front() const;
+        virtual Data &Front();
 
-        virtual const Data& Back() const;
-        virtual Data& Back();
+        virtual const Data &Back() const;
+        virtual Data &Back();
 
         /* ************************************************************************ */
 
@@ -87,45 +84,41 @@ namespace lasd {
         // Specific member function (inherited from PreOrderMappableContainer)
         void PreOrderMap(MapFun) override;
 
-
         /* ************************************************************************ */
 
         // Specific member function (inherited from PostOrderMappableContainer)
         void PostOrderMap(MapFun) override;
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
     template<typename Data>
-    class SortableLinearContainer: public LinearContainer<Data> {
+    class SortableLinearContainer : public LinearContainer<Data> {
 
-    private:
-
+     private:
         void merge(unsigned long int s, unsigned long int m, unsigned long int e) noexcept;
         void mergeSort(unsigned long int s, unsigned long int e) noexcept;
 
-    protected:
+     protected:
+        inline SortableLinearContainer<Data>() : LinearContainer<Data>() = default;
 
-        inline SortableLinearContainer<Data>(): LinearContainer<Data>() = default;
-
-    public:
-
+     public:
         // Destructor
         inline virtual ~SortableLinearContainer() = default;
 
         /* ************************************************************************ */
 
         // Copy assignment
-        SortableLinearContainer<Data>& operator=(const SortableLinearContainer<Data>&) = delete; // Copy assignment of abstract types is not possible.
+        SortableLinearContainer<Data> &operator=(const SortableLinearContainer<Data> &) = delete;// Copy assignment of abstract types is not possible.
 
         // Move assignment
-        SortableLinearContainer<Data>& operator=(SortableLinearContainer<Data>&&) = delete; // Move assignment of abstract types is not possible.
+        SortableLinearContainer<Data> &operator=(SortableLinearContainer<Data> &&) = delete;// Move assignment of abstract types is not possible.
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const SortableLinearContainer<Data>&) const noexcept; // Comparison of abstract types is possible.
-        bool operator!=(const SortableLinearContainer<Data>&) const noexcept; // Comparison of abstract types is possible.
+        bool operator==(const SortableLinearContainer<Data> &) const noexcept;// Comparison of abstract types is possible.
+        bool operator!=(const SortableLinearContainer<Data> &) const noexcept;// Comparison of abstract types is possible.
 
         /* ************************************************************************ */
 
@@ -133,23 +126,21 @@ namespace lasd {
 
         // type Sort() specifiers;
         inline void Sort() noexcept {
-            if(Size() > 1)
+            if (Size() > 1)
                 SortEntryProcess(0, Size() - 1);
         };
 
-
-    protected:
-
+     protected:
         // DataComparison must returns 0 if the two data are equals, 1 if the first is greater than the second, -1 otherwise
-        int DataComparison(const Data&, const Data&) const noexcept = 0;
+        int DataComparison(const Data &, const Data &) const noexcept = 0;
 
         virtual inline void SortEntryProcess(unsigned long int start, unsigned long int end) noexcept {
             mergeSort(start, end);
         }
     };
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-}
+}// namespace lasd
 
 #endif

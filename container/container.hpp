@@ -42,10 +42,10 @@ namespace lasd {
 
         // type Empty() specifiers; // (concrete function should not throw exceptions)
 
-        inline bool Empty() const noexcept { return size == 0; }
+        virtual inline bool Empty() const noexcept { return size == 0; }
 
         // type Size() specifiers; // (concrete function should not throw exceptions)
-        inline unsigned long int Size() const noexcept { return size; }
+        virtual inline unsigned long int Size() const noexcept { return size; }
     };
 
     /* ************************************************************************** */
