@@ -18,7 +18,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline QueueLst<Data>() : Queue<Data>(), List<Data>() = default;
+        inline QueueLst<Data>() = default;
 
         /* ************************************************************************ */
 

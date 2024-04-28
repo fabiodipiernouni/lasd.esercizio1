@@ -32,7 +32,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline QueueVec<Data>() : Vector<Data>(chunkSize) = default;
+        inline QueueVec<Data>() : Vector<Data>(chunkSize) {};
 
         /* ************************************************************************ */
 

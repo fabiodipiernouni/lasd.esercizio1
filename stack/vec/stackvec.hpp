@@ -27,7 +27,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        StackVec<Data>() : Vector<Data>(chunkSize) = default;
+        StackVec<Data>() : Vector<Data>(chunkSize) {  };
         
 
         /* ************************************************************************ */

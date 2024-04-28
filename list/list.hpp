@@ -15,7 +15,7 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class List : public virtual ClearableContainer, public virtual LinearContainer<Data>, public virtual DictionaryContainer<Data> {
+    class List : virtual public ClearableContainer, virtual public LinearContainer<Data>, virtual public DictionaryContainer<Data> {
 
      protected:
         using Container::size;
@@ -80,13 +80,17 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline List<Data>() : ClearableContainer(), LinearContainer<Data>(), DictionaryContainer<Data>() = default;
+        inline List<Data>() = default;
+
+        // Specific constructor
+        inline List(const TraversableContainer<Data>&);
+        inline List(MappableContainer<Data>&&);
 
         /* ************************************************************************ */
 
         // Copy constructor
         inline List<Data>(const List<Data> &l) noexcept {
-            return this->operator=(l);
+            this->operator=(l);
         };
 
         // Move constructor
@@ -100,7 +104,7 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Destructor
-        inline ~List<Data>() { Clear(); };
+        inline ~List() { this->Clear(); };
 
         /* ************************************************************************ */
 

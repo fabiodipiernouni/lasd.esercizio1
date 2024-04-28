@@ -13,11 +13,11 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class Queue: public ClearableContainer {
+class Queue: virtual public ClearableContainer {
 
 protected:
 
-  inline Queue<Data>(): ClearableContainer() = default;
+  inline Queue<Data>() = default;
 
 public:
 

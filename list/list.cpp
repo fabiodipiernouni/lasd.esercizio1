@@ -7,6 +7,19 @@ namespace lasd {
 
     /*** List<Data> class ***/
 
+    // Specific constructor
+    template <typename Data>
+    inline List<Data>::List(const TraversableContainer<Data>& container)
+    {
+        container.Traverse([this](const Data& d) { InsertAtBack(d); });
+    }
+
+    template <typename Data>
+    inline List<Data>::List(MappableContainer<Data>&& container)
+    {
+        container.Map([this](Data& d) { InsertAtBack(std::move(d)); });
+    }
+
     /**|           |            |           |*/
     //  HEAD(front)   ->        ->TAIL(back)
     /**|           |            |           |*/

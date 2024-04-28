@@ -92,7 +92,7 @@ namespace lasd {
             Data *newElements = new Data[newSize];// Alloca un nuovo array
 
             // Copia i dati dall'array vecchio a quello nuovo
-            for (size_t i = 0; i < Size(); ++i) {
+            for (size_t i = 0; i < this->Size(); ++i) {
                 newElements[i] = std::move(elements[(front + i) % QueueSize()]);// Usa std::move per evitare copie inutili
             }
 
@@ -100,7 +100,7 @@ namespace lasd {
 
             elements = newElements;// Imposta elements per puntare al nuovo array
             front = 0;              // Resetta front
-            rear = Size() - 1;     // Resetta rear
+            rear = this->Size() - 1;     // Resetta rear
         } catch (std::bad_alloc &e) {
             cout << "ERROR - bad_alloc caught: " << e.what() << endl;
         }
@@ -108,11 +108,11 @@ namespace lasd {
 
     template<typename Data>
     bool QueueVec<Data>::operator==(const QueueVec &queue) const noexcept {
-        if (Size() != queue.Size()) { //Size is the number of the elements inside the queue
+        if (this->Size() != queue.Size()) { //Size is the number of the elements inside the queue
             return false;
         }
 
-        for (unsigned long int i = 0; i < Size(); ++i) {
+        for (unsigned long int i = 0; i < this->Size(); ++i) {
             if (elements[(front + i) % QueueSize()] != queue.elements[(queue.front + i) % queue.QueueSize()]) {
                 return false;
             }

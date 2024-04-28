@@ -19,7 +19,7 @@ namespace lasd {
 
     protected:
 
-        inline TestableContainer<Data>(): Container() = default;
+        inline TestableContainer() = default;
 
     public:
 

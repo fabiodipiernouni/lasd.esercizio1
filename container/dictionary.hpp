@@ -16,7 +16,7 @@ namespace lasd {
     class DictionaryContainer : virtual public TestableContainer<Data> {
 
      protected:
-        inline DictionaryContainer<Data>() : TestableContainer<Data>() = default;
+        inline DictionaryContainer<Data>() = default;
 
      public:
         // Destructor

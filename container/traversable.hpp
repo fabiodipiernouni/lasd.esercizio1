@@ -21,7 +21,7 @@ namespace lasd {
 
      protected:
         // constructor
-        inline TraversableContainer<Data>() : TestableContainer<Data>() = default;
+        inline TraversableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -70,7 +70,7 @@ namespace lasd {
     class PreOrderTraversableContainer : virtual public TraversableContainer<Data> {
 
      protected:
-        inline PreOrderTraversableContainer<Data>() : TraversableContainer<Data>() = default;
+        inline PreOrderTraversableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -102,7 +102,7 @@ namespace lasd {
         using FoldFun = typename TraversableContainer<Data>::FoldFun<Accumulator>;
 
         template<typename Accumulator>
-        virtual Accumulator PreOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator PreOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
 
         /* ************************************************************************ */
 
@@ -119,7 +119,7 @@ namespace lasd {
     class PostOrderTraversableContainer : virtual public TraversableContainer<Data> {
 
      protected:
-        inline PostOrderTraversableContainer<Data>() : TraversableContainer<Data>() = default;
+        inline PostOrderTraversableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -151,7 +151,7 @@ namespace lasd {
         using FoldFun = typename TraversableContainer<Data>::template FoldFun<Accumulator>;
 
         template<typename Accumulator>
-        virtual Accumulator PostOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator PostOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
 
         /* ************************************************************************ */
 
@@ -168,7 +168,7 @@ namespace lasd {
     class InOrderTraversableContainer : virtual public TraversableContainer<Data> {
 
      protected:
-        inline InOrderTraversableContainer<Data>() : TraversableContainer<Data>() = default;
+        inline InOrderTraversableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -200,7 +200,7 @@ namespace lasd {
         using FoldFun = typename TraversableContainer<Data>::template FoldFun<Accumulator>;
 
         template<typename Accumulator>
-        virtual Accumulator InOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator InOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
 
         /* ************************************************************************ */
 
@@ -215,7 +215,7 @@ namespace lasd {
     class BreadthTraversableContainer : virtual public TraversableContainer<Data> {
 
      protected:
-        inline BreadthTraversableContainer<Data>() : TraversableContainer<Data>() = default;
+        inline BreadthTraversableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -247,7 +247,7 @@ namespace lasd {
         using FoldFun = typename TraversableContainer<Data>::template FoldFun<Accumulator>;
 
         template<typename Accumulator>
-        virtual Accumulator BreadthFold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator BreadthFold(FoldFun<Accumulator>, const Accumulator &) const;
 
         /* ************************************************************************ */
 

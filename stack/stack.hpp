@@ -21,7 +21,7 @@ private:
 
 protected:
 
-  inline Stack(): Container<Data>{} = default; // Default constructor
+  inline Stack() = default; // Default constructor
 
 public:
 

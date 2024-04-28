@@ -14,7 +14,7 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class Vector : public virtual ResizableContainer, public virtual LinearContainer<Data> {
+    class Vector : virtual public ResizableContainer, virtual public LinearContainer<Data> {
 
      protected:
         using Container::size;
@@ -22,7 +22,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline Vector<Data>() : ResizableContainer(), LinearContainer<Data>() : size(0){};
+        inline Vector<Data>() = default;
 
         /* ************************************************************************ */
 
@@ -106,7 +106,7 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class SortableVector : public virtual Vector<Data>, public virtual SortableLinearContainer<Data> {
+    class SortableVector : virtual public Vector<Data>, virtual public SortableLinearContainer<Data> {
 
      protected:
         // Type for comparison function
@@ -115,9 +115,12 @@ namespace lasd {
         // Property for comparison function
         ComparisonFunction compare{nullptr};
 
+        using Container::size;
+        using Vector<Data>::elements;
+
      public:
         // Default constructor
-        inline SortableVector<Data>() : Vector<Data>(), SortableLinearContainer<Data>() = default;
+        inline SortableVector<Data>() = default;
 
         /* ************************************************************************ */
 
@@ -157,8 +160,28 @@ namespace lasd {
         // Move assignment
         inline SortableVector &operator=(SortableVector &&) noexcept;
 
+        /*virtual void Traverse(typename TraversableContainer<Data>::TraverseFun fun) const override {
+            for (unsigned long i = 0; i < size; i++) {
+                fun(elements[i]);
+            }
+        }
+
+        virtual void Map(typename MappableContainer<Data>::MapFun fun) override {
+            for (unsigned long i = 0; i < size; i++) {
+                elements[i] = fun(elements[i]);
+            }
+        }
+
+        virtual void PreOrderTraverse(typename PreOrderTraversableContainer<Data>::TraverseFun fun) const override {
+            for (unsigned long i = 0; i < size; i++) {
+                fun(elements[i]);
+            }
+        }
+
+        virtual*/
+
      protected:
-        int DataComparison(const Data &dataLeft, const Data &dataRight) const override {
+        int DataComparison(const Data &dataLeft, const Data &dataRight) const noexcept override {
             if (compare != nullptr) {
                 return compare(dataLeft, dataRight);
             } else {

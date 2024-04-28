@@ -20,7 +20,7 @@ namespace lasd {
     class MappableContainer : virtual public TraversableContainer<Data> {
 
      protected:
-        inline MappableContainer<Data>() : TraversableContainer<Data>() = default;
+        inline MappableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -53,11 +53,11 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class PreOrderMappableContainer : public MappableContainer<Data>, public PreOrderTraversableContainer<Data> {
+    class PreOrderMappableContainer : virtual public MappableContainer<Data>, virtual public PreOrderTraversableContainer<Data> {
 
      protected:
         // constructor
-        inline PreOrderMappableContainer<Data>() : MappableContainer<Data>(), PreOrderTraversableContainer<Data>() = default;
+        inline PreOrderMappableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -96,11 +96,11 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class PostOrderMappableContainer : public MappableContainer<Data>, public PostOrderTraversableContainer<Data> {
+    class PostOrderMappableContainer : virtual public MappableContainer<Data>, virtual public PostOrderTraversableContainer<Data> {
 
      protected:
         // constructor
-        inline PostOrderMappableContainer<Data>() : MappableContainer<Data>(), PostOrderTraversableContainer<Data>() = default;
+        inline PostOrderMappableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -136,11 +136,11 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class InOrderMappableContainer : public MappableContainer<Data>, public InOrderTraversableContainer<Data> {
+    class InOrderMappableContainer : virtual public MappableContainer<Data>, virtual public InOrderTraversableContainer<Data> {
 
      protected:
         // constructor
-        inline InOrderMappableContainer<Data>() : MappableContainer<Data>(), InOrderTraversableContainer<Data>() = default;
+        inline InOrderMappableContainer<Data>() = default;
 
      public:
         // Destructor
@@ -176,11 +176,11 @@ namespace lasd {
     /* ************************************************************************** */
 
     template<typename Data>
-    class BreadthMappableContainer : public MappableContainer<Data>, public BreadthTraversableContainer<Data> {
+    class BreadthMappableContainer : virtual public MappableContainer<Data>, virtual public BreadthTraversableContainer<Data> {
 
      protected:
         // constructor
-        inline BreadthMappableContainer<Data>() : MappableContainer<Data>(), BreadthTraversableContainer<Data>() = default;
+        inline BreadthMappableContainer<Data>() = default;
 
      public:
         // Destructor

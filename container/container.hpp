@@ -40,11 +40,11 @@ namespace lasd {
 
         // Specific member functions
 
-        // type Empty() specifiers; // (concrete function should not throw exceptions)
+        // (concrete function should not throw exceptions)
 
         virtual inline bool Empty() const noexcept { return size == 0; }
 
-        // type Size() specifiers; // (concrete function should not throw exceptions)
+        // (concrete function should not throw exceptions)
         virtual inline unsigned long int Size() const noexcept { return size; }
     };
 

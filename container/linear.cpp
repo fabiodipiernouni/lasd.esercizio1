@@ -9,9 +9,9 @@ namespace lasd {
 
     template<typename Data>
     bool LinearContainer<Data>::operator==(const LinearContainer<Data> &container) const noexcept {
-        if (Size() != container.Size()) return false;
+        if (this->Size() != container.Size()) return false;
 
-        for (unsigned long i{0}; i < Size(); i++) {
+        for (unsigned long i{0}; i < this->Size(); i++) {
             if ((*this)[i] != container[i]) {
                 return false;
             }
@@ -27,7 +27,7 @@ namespace lasd {
 
     template<typename Data>
     Data &LinearContainer<Data>::Front() {
-        if (Size() == 0)
+        if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no front element");
 
         return (*this)[0];
@@ -35,7 +35,7 @@ namespace lasd {
 
     template<typename Data>
     const Data &LinearContainer<Data>::Front() const {
-        if (Size() == 0)
+        if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no front element");
 
         return (*this)[0];
@@ -43,7 +43,7 @@ namespace lasd {
 
     template<typename Data>
     Data &LinearContainer<Data>::Back() {
-        if (Size() == 0)
+        if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no back element");
 
         return (*this)[Size() - 1];
@@ -51,15 +51,15 @@ namespace lasd {
 
     template<typename Data>
     const Data &LinearContainer<Data>::Back() const {
-        if (Size() == 0)
+        if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no back element");
 
-        return (*this)[Size() - 1];
+        return (*this)[this->Size() - 1];
     }
 
     template<typename Data>
     void LinearContainer<Data>::Traverse(const typename TraversableContainer<Data>::TraverseFun traverseFun) const {
-        for (unsigned long i{0}; i < Size(); i++) {
+        for (unsigned long i{0}; i < this->Size(); i++) {
             traverseFun((*this)[i]);
         }
     }
@@ -78,7 +78,7 @@ namespace lasd {
 
     template<typename Data>
     void LinearContainer<Data>::Map(typename MappableContainer<Data>::MapFun mf) {
-        for (unsigned long i{0}; i < Size(); i++) {
+        for (unsigned long i{0}; i < this->Size(); i++) {
             mf((*this)[i]);
         }
     }
@@ -90,7 +90,7 @@ namespace lasd {
 
     template<typename Data>
     void LinearContainer<Data>::PostOrderMap(typename MappableContainer<Data>::MapFun mf) {
-        for (unsigned long i{Size() - 1}; i >= 0; i--) {
+        for (unsigned long i{this->Size() - 1}; i >= 0; i--) {
             mf((*this)[i]);
         }
     }
