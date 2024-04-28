@@ -7,6 +7,9 @@ namespace lasd {
 
     /*** List<Data> class ***/
 
+    /**|           |            |           |*/
+    //  HEAD(front)   ->        ->TAIL(back)
+    /**|           |            |           |*/
     template<typename Data>
     List<Data> List<Data>::operator=(const List<Data> &l) noexcept {
         if (this != &l) {
@@ -72,7 +75,7 @@ namespace lasd {
     template<typename Data>
     void List<Data>::RemoveFromFront() {
         if (Empty()) {
-            throw std::length_error("Cannot remove from an empty list");
+            throw std::length_error("Cannot remove from an empty structure");
         }
 
         Node *temp = head;
@@ -87,7 +90,7 @@ namespace lasd {
     template<typename Data>
     Data List<Data>::FrontNRemove() {
         if (Empty()) {
-            throw std::length_error("Cannot remove from an empty list");
+            throw std::length_error("Cannot remove from an empty structure");
         }
 
         Data temp = head->data;
@@ -168,7 +171,7 @@ namespace lasd {
     template<typename Data>
     const Data &List<Data>::operator[](const unsigned long idx) const {
         if (Empty()) {
-            throw std::out_of_range("Cannot access an empty list");
+            throw std::out_of_range("Cannot access an empty structure");
         }
 
         if (idx >= size) {
@@ -190,7 +193,7 @@ namespace lasd {
     template<typename Data>
     Data &List<Data>::operator[](const unsigned long idx) {
         if (Empty()) {
-            throw std::out_of_range("Cannot access an empty list");
+            throw std::out_of_range("Cannot access an empty structure");
         }
 
         if (idx >= size) {
@@ -212,7 +215,7 @@ namespace lasd {
     template<typename Data>
     const Data &List<Data>::Front() const {
         if (Empty()) {
-            throw std::length_error("Cannot access an empty list");
+            throw std::length_error("Cannot access an empty structure");
         }
 
         return head->data;
@@ -221,7 +224,7 @@ namespace lasd {
     template<typename Data>
     Data &List<Data>::Front() {
         if (Empty()) {
-            throw std::length_error("Cannot access an empty list");
+            throw std::length_error("Cannot access an empty structure");
         }
 
         return head->data;
@@ -230,7 +233,7 @@ namespace lasd {
     template<typename Data>
     const Data &List<Data>::Back() const {
         if (Empty()) {
-            throw std::length_error("Cannot access an empty list");
+            throw std::length_error("Cannot access an empty structure");
         }
 
         return tail->data;
@@ -239,7 +242,7 @@ namespace lasd {
     template<typename Data>
     Data &List<Data>::Back() {
         if (Empty()) {
-            throw std::length_error("Cannot access an empty list");
+            throw std::length_error("Cannot access an empty structure");
         }
 
         return tail->data;

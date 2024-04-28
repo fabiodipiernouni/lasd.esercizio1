@@ -13,33 +13,33 @@ namespace lasd {
     }
 
     template<typename Data>
-    inline QueueVec<Data>::QueueVec(const MappableContainer<Data> &container) {
-        container.Map([this](Data &val) { this->Enqueue(val); });
+    inline QueueVec<Data>::QueueVec(MappableContainer<Data> &&container) {
+        container.Map([this](Data &val) { this->Enqueue(std::move(val)); });
     }
 
     template<typename Data>
-    inline Data const &QueueVec<Data>::Head() const {
+    inline Data const &QueueVec<Data>::front() const {
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
 
-        return elements[head];
+        return elements[front];
     }
 
     template<typename Data>
-    inline Data &QueueVec<Data>::Head() {
+    inline Data &QueueVec<Data>::front() {
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
 
-        return elements[head];
+        return elements[front];
     }
 
     template<typename Data>
     void QueueVec<Data>::Enqueue(const Data &val) {
 
         if (Empty()) {
-            head = 0;
+            front = 0;
             rear = 0;
         } else {
             if (Full()) { Resize(QueueSize() + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
@@ -53,7 +53,7 @@ namespace lasd {
     template<typename Data>
     void QueueVec<Data>::Enqueue(Data &&val) {
         if (Empty()) {
-            head = 0;
+            front = 0;
             rear = 0;
         } else {
             if (Full()) { Resize(QueueSize + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
@@ -70,10 +70,10 @@ namespace lasd {
             throw std::length_error("Queue is empty");
         }
 
-        if (head == rear) {
+        if (front == rear) {
             this->Clear();
         } else {
-            head = (head + 1) % QueueSize();// Circular increment
+            front = (front + 1) % QueueSize();// Circular increment
         }
 
         if ((QueueSize() - Size()) >= 2 * chunkSize) {
@@ -93,13 +93,13 @@ namespace lasd {
 
             // Copia i dati dall'array vecchio a quello nuovo
             for (size_t i = 0; i < Size(); ++i) {
-                newElements[i] = std::move(elements[(head + i) % QueueSize()]);// Usa std::move per evitare copie inutili
+                newElements[i] = std::move(elements[(front + i) % QueueSize()]);// Usa std::move per evitare copie inutili
             }
 
             delete[] elements;// Libera la memoria dell'array vecchio
 
             elements = newElements;// Imposta elements per puntare al nuovo array
-            head = 0;              // Resetta head
+            front = 0;              // Resetta front
             rear = Size() - 1;     // Resetta rear
         } catch (std::bad_alloc &e) {
             cout << "ERROR - bad_alloc caught: " << e.what() << endl;
@@ -113,7 +113,7 @@ namespace lasd {
         }
 
         for (unsigned long int i = 0; i < Size(); ++i) {
-            if (elements[(head + i) % QueueSize()] != queue.elements[(queue.head + i) % queue.QueueSize()]) {
+            if (elements[(front + i) % QueueSize()] != queue.elements[(queue.front + i) % queue.QueueSize()]) {
                 return false;
             }
         }

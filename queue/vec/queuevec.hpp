@@ -19,7 +19,7 @@ namespace lasd {
      private:
         const unsigned long int chunkSize = 32;
 
-        inline unsigned long int QueueLength() { return (rear - head + size) % size;}
+        inline unsigned long int QueueLength() { return (rear - front + size) % size;}
 
         inline unsigned long int QueueSize() { return size; }
 
@@ -27,7 +27,7 @@ namespace lasd {
         using Vector<Data>::elements;
         using Vector<Data>::size;
 
-        unsigned long int head = -1;
+        unsigned long int front = -1;
         unsigned long int rear = -1;
 
      public:
@@ -39,23 +39,23 @@ namespace lasd {
         // Specific constructor
 
         // A stack obtained from a TraversableContainer
-        inline QueueVec<Data>(const TraversableContainer<Data> &container);
+        inline QueueVec<Data>(const TraversableContainer<Data> &);
         // A stack obtained from a MappableContainer
-        inline QueueVec<Data>(const MappableContainer<Data> &container);
+        inline QueueVec<Data>(MappableContainer<Data> &&);
 
         /* ************************************************************************ */
 
         // Copy constructor
         // QueueVec(argument);
         inline QueueVec<Data>(const QueueVec<Data> &queue) : Vector<Data>(queue) {
-            head = queue.head;
+            front = queue.front;
             rear = queue.rear;
         }
 
         // Move constructor
         // QueueVec(argument);
         inline QueueVec<Data>(QueueVec<Data> &&queue) noexcept : Vector<Data>(std::move(queue)) {
-            head = queue.head;
+            front = queue.front;
             rear = queue.rear;
             queue.Clear();
         }
@@ -70,7 +70,7 @@ namespace lasd {
         // Copy assignment
         inline QueueVec &operator=(const QueueVec &queue) {
             Vector<Data>::operator=(queue);
-            head = queue.head;
+            front = queue.front;
             rear = queue.rear;
             return *this;
         }
@@ -78,7 +78,7 @@ namespace lasd {
         // Move assignment
         inline QueueVec &operator=(QueueVec &&queue) noexcept {
             Vector<Data>::operator=(std::move(queue));
-            head = queue.head;
+            front = queue.front;
             rear = queue.rear;
             return *this;
         }
@@ -94,10 +94,10 @@ namespace lasd {
         // Specific member functions (inherited from Queue)
 
         // Override Queue member (non-mutable version; throw std::length_error when empty)
-        virtual inline Data const &Head() const override;
+        virtual inline Data const &front() const override;
 
         // Override Queue member (mutable version; throw std::length_error when empty)
-        virtual inline Data &Head() override;
+        virtual inline Data &front() override;
 
         // Override Queue member (throw std::length_error when empty)
         virtual void Dequeue() override;
@@ -116,7 +116,7 @@ namespace lasd {
         // Specific member functions (inherited from Container)
 
         // Override Container member
-        virtual inline bool Empty() const noexcept override { return head == -1 && rear == -1; }
+        virtual inline bool Empty() const noexcept override { return front == -1 && rear == -1; }
 
         // Override Container member
         virtual inline unsigned long Size() const noexcept override { return QueueLength(); }
@@ -127,7 +127,7 @@ namespace lasd {
 
         // Override ClearableContainer member
         inline void Clear() noexcept override {
-            head = -1; rear = -1; 
+            front = -1; rear = -1; 
             Vector<Data>::Clear();
             elements = new Data[chunkSize];
         }
@@ -137,7 +137,7 @@ namespace lasd {
 
      protected:
         // Auxiliary functions, if necessary!
-        inline bool Full() noexcept const { return ((rear + 1) % size) == head; } // if rear circulary incremented is equal to front, means that the queue is full
+        inline bool Full() noexcept const { return ((rear + 1) % size) == front; } // if rear circulary incremented is equal to front, means that the queue is full
     };
 
     /* ************************************************************************** */

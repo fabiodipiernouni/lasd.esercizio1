@@ -27,16 +27,16 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  Queue& operator=(const Queue&) noexcept = delete;
+  virtual Queue& operator=(const Queue&) noexcept = delete;
 
   // Move assignment
-  Queue& operator=(Queue&&) noexcept = delete;
+  virtual Queue& operator=(Queue&&) noexcept = delete;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(const Queue&) const noexcept = delete;
-  bool operator!=(const Queue&) const noexcept = delete;
+  virtual bool operator==(const Queue&) const noexcept = delete;
+  virtual bool operator!=(const Queue&) const noexcept = delete;
 
   /* ************************************************************************ */
 
