@@ -1,4 +1,3 @@
-#include "queuevec.hpp"
 #include <iostream>
 
 namespace lasd {
@@ -18,7 +17,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    inline Data const &QueueVec<Data>::front() const {
+    inline Data const &QueueVec<Data>::Head() const {
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
@@ -27,7 +26,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    inline Data &QueueVec<Data>::front() {
+    inline Data &QueueVec<Data>::Head() {
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
@@ -56,7 +55,7 @@ namespace lasd {
             front = 0;
             rear = 0;
         } else {
-            if (Full()) { Resize(QueueSize + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
+            if (Full()) { Resize(QueueSize() + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
 
             rear = (rear + 1) % QueueSize();// Circular increment
         }
@@ -85,7 +84,7 @@ namespace lasd {
     void QueueVec<Data>::Resize(unsigned long newSize) noexcept {
         if (newSize % chunkSize != 0) {
             newSize = ((newSize / chunkSize) + 1) * chunkSize;// Round up to the nearest multiple of chunkSize
-            cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << endl;
+            std::cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << std::endl;
         }
 
         try {
@@ -98,17 +97,17 @@ namespace lasd {
 
             delete[] elements;// Libera la memoria dell'array vecchio
 
-            elements = newElements;// Imposta elements per puntare al nuovo array
+            elements = newElements; // Imposta elements per puntare al nuovo array
             front = 0;              // Resetta front
-            rear = this->Size() - 1;     // Resetta rear
+            rear = this->Size() - 1;// Resetta rear
         } catch (std::bad_alloc &e) {
-            cout << "ERROR - bad_alloc caught: " << e.what() << endl;
+            std::cout << "ERROR - bad_alloc caught: " << e.what() << std::endl;
         }
     }
 
     template<typename Data>
     bool QueueVec<Data>::operator==(const QueueVec &queue) const noexcept {
-        if (this->Size() != queue.Size()) { //Size is the number of the elements inside the queue
+        if (this->Size() != queue.Size()) {//Size is the number of the elements inside the queue
             return false;
         }
 
@@ -125,7 +124,6 @@ namespace lasd {
     inline bool QueueVec<Data>::operator!=(const QueueVec &queue) const noexcept {
         return !operator==(queue);
     }
-
 
     /* ************************************************************************** */
 

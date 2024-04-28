@@ -1,5 +1,3 @@
-#include "stackvec.hpp"
-
 namespace lasd {
 
     /* ************************************************************************** */
@@ -12,7 +10,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    inline StackVec<Data>::StackVec(MappableContainer<Data> && container) {
+    inline StackVec<Data>::StackVec(MappableContainer<Data> &&container) {
         container.Map([this](Data &&val) { this->Push(std::move(val)); });
     }
 
@@ -20,9 +18,9 @@ namespace lasd {
     inline StackVec<Data> StackVec<Data>::operator=(const StackVec<Data> &stack) noexcept {
         if (this != &stack) {
             Clear();
-            
-            if (Size != stack.Size) {
-                Resize(stack.Size);
+
+            if (Size() != stack.Size()) {
+                Resize(stack.Size());
             }
 
             if (!stack.Empty()) {
@@ -37,9 +35,9 @@ namespace lasd {
     template<typename Data>
     inline StackVec<Data> StackVec<Data>::operator=(StackVec<Data> &&stack) noexcept {
         if (this != &stack) {
-            Clear();
+            this->Clear();
             std::swap(elements, stack.elements);
-            std::swap(Size, stack.Size);
+            std::swap(this->size, stack.size);
             std::swap(top, stack.top);
         }
 
@@ -57,11 +55,11 @@ namespace lasd {
             throw std::length_error("Stack is empty");
         }
 
-        if(top == 0) Clear();
+        if (top == 0) Clear();
         else
             top--;
 
-        if((Size() - top) >= 2 * chunkSize) {
+        if ((Size() - top) >= 2 * chunkSize) {
             Resize(Size() - chunkSize);
         }
     }
@@ -69,7 +67,7 @@ namespace lasd {
     template<typename Data>
     void StackVec<Data>::Push(const Data &val) {
         if (Full()) {
-            Resize(Size + chunkSize);
+            Resize(Size() + chunkSize);
         }
 
         elements[++top] = val;
@@ -78,7 +76,7 @@ namespace lasd {
     template<typename Data>
     void StackVec<Data>::Push(Data &&val) {
         if (Full()) {
-            Resize(Size + chunkSize);
+            Resize(Size() + chunkSize);
         }
 
         elements[++top] = std::move(val);
@@ -88,17 +86,14 @@ namespace lasd {
     void StackVec<Data>::Resize(unsigned long newSize) noexcept {
         if (newSize % chunkSize != 0) {
             newSize = ((newSize / chunkSize) + 1) * chunkSize;// Round up to the nearest multiple of chunkSize
-            std::cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << endl;
+            std::cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << std::endl;
         }
 
-        try
-        {
+        try {
             Vector<Data>::Resize(newSize);
-        }
-        catch(const std::bad_alloc &e)
-        {
+        } catch (const std::bad_alloc &e) {
             std::cerr << e.what() << '\n';
-        }        
+        }
     }
 
     template<typename Data>

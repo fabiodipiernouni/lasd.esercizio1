@@ -73,22 +73,22 @@ namespace lasd {
         // Specific member functions (inherited from Stack)
 
         // Override Stack member (non-mutable version; throw std::length_error when empty)
-        inline const Data& Top() const override { return List<Data>::Back(); }
+        inline const Data& Top() const override { return List<Data>::Front(); }
             
         // Override Stack member (non-mutable version; throw std::length_error when empty)
-        inline Data& Top() override { return List<Data>::Back(); }
+        inline Data& Top() override { return List<Data>::Front(); }
 
         // Override Stack member (throw std::length_error when empty)
-        inline void Pop() override { List<Data>::RemoveBack(); }
+        inline void Pop() override { List<Data>::RemoveFromFront(); }
 
         // Override Stack member (throw std::length_error when empty)
-        inline Data TopNPop() override { Data ret = this->Top(); this->Pop(); return ret; }
+        inline Data TopNPop() override { return List<Data>::FrontNRemove(); }
 
         // Override Stack member (copy of the value)
-        inline void Push(const Data& value) override { List<Data>::InsertBack(value); }
+        inline void Push(const Data& value) override { List<Data>::InsertAtFront(value); }
 
         // Override Stack member (move of the value)
-        inline void Push(Data&& value) override { List<Data>::InsertBack(std::move(value)); }
+        inline void Push(Data&& value) override { List<Data>::InsertAtFront(std::move(value)); }
 
         /* ************************************************************************ */
 
@@ -103,5 +103,7 @@ namespace lasd {
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "stacklst.cpp"
 
 #endif

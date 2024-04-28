@@ -125,9 +125,9 @@ namespace lasd {
         // Specific member functions
 
         // Copy of the value
-        virtual void InsertAtFront(const Data &val);
+        virtual void InsertAtFront(const Data &);
         // Move of the value
-        virtual void InsertAtFront(Data &&val);
+        virtual void InsertAtFront(Data &&);
 
         // throw std::length_error when empty
         virtual void RemoveFromFront();
@@ -221,14 +221,16 @@ namespace lasd {
 
      protected:
         // Auxiliary functions
-        void Traverse(TraverseFun, Node &) const;
-        void PostOrderTraverse(TraverseFun, Node &) const;
-        void Map(MapFun, Node &);
-        void PostOrderMap(MapFun, Node &);
+        void Traverse(TraverseFun, Node*) const;
+        void PostOrderTraverse(TraverseFun, Node*) const;
+        void Map(MapFun, Node*);
+        void PostOrderMap(MapFun, Node*);
     };
 
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "list.cpp"
 
 #endif

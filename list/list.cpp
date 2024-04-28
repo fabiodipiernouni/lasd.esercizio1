@@ -1,6 +1,3 @@
-
-#include "list.hpp"
-
 namespace lasd {
 
     /* ************************************************************************** */
@@ -28,7 +25,7 @@ namespace lasd {
         if (this != &l) {
             Clear();
             if (!l.Empty()) {
-                l.Traverse([this](const Data &val) { this.InsertAtBack(val); });
+                l.Traverse([this](const Data &val) { this->InsertAtBack(val); });
             }
         }
 
@@ -37,10 +34,10 @@ namespace lasd {
 
     template<typename Data>
     List<Data> List<Data>::operator=(List<Data> &&l) noexcept {
-        if (this != l) {
+        if (this->operator!=(l)) {
             Clear();
             if (!l.Empty()) {
-                l.Map([this](Data &val) { this.InsertAtBack(val); });
+                l.Map([this](Data &val) { this->InsertAtBack(val); });
             }
         }
 
@@ -76,13 +73,13 @@ namespace lasd {
     template<typename Data>
     void List<Data>::InsertAtFront(const Data &val) {
         head = new Node(val, head);
-        this.size++;
+        this->size++;
     };
 
     template<typename Data>
     void List<Data>::InsertAtFront(Data &&val) {
         head = new Node(std::move(val), head);
-        this.size++;
+        this->size++;
     };
 
     template<typename Data>
@@ -94,7 +91,7 @@ namespace lasd {
         Node *temp = head;
         head = head->next;
         delete temp;
-        this.size--;
+        this->size--;
         if(Empty()) {
             tail = nullptr;
         }
@@ -121,7 +118,7 @@ namespace lasd {
             tail = tail->next;
         }
 
-        this.size++;
+        this->size++;
     };
 
     template<typename Data>
@@ -134,7 +131,7 @@ namespace lasd {
             tail = tail->next;
         }
 
-        this.size++;
+        this->size++;
     };
 
     template<typename Data>
@@ -171,7 +168,7 @@ namespace lasd {
                 Node *toDelete = temp->next;
                 temp->next = temp->next->next;
                 delete toDelete;
-                this.size--;
+                this->size--;
                 return true;
             }
 
@@ -261,9 +258,15 @@ namespace lasd {
         return tail->data;
     }
 
+    template <typename Data>
+    inline void List<Data>::Traverse(TraverseFun f) const
+    {
+        PreOrderTraverse(f);
+    }
+
     template<typename Data>
-    void List<Data>::Traverse(TraverseFun fun, Node& start) const {
-        Node *temp = start ? start : head;
+    void List<Data>::Traverse(TraverseFun fun, Node* start) const {
+        Node *temp = start;
         while (temp != nullptr) {
             fun(temp->data);
             temp = temp->next;
@@ -276,11 +279,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    void List<Data>::PostOrderTraverse(TraverseFun fun, Node& from) const {
-        if (from == nullptr) {
-            return;
-        }
-
+    void List<Data>::PostOrderTraverse(TraverseFun fun, Node* from) const {
         PostOrderTraverse(fun, from->next);
         fun(from->data);
     }
@@ -291,7 +290,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    void List<Data>::Map(MapFun mapFun, Node& start) {
+    void List<Data>::Map(MapFun mapFun, Node* start) {
         Node *temp = start;
         while (temp != nullptr) {
             mapFun(temp->data);
@@ -301,7 +300,7 @@ namespace lasd {
 
     template<typename Data>
     void List<Data>::Map(MapFun mapFun) {
-        Map(mapFun, head);
+        PreOrderMap(mapFun);
     }
 
     template<typename Data>
@@ -310,11 +309,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    void List<Data>::PostOrderMap(MapFun mapFun, Node& from) {
-        if (from == nullptr) {
-            return;
-        }
-
+    void List<Data>::PostOrderMap(MapFun mapFun, Node* from) {
         PostOrderMap(mapFun, from->next);
         mapFun(from->data);
     }

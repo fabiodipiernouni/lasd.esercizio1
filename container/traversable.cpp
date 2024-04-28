@@ -1,12 +1,10 @@
-#include "traversable.hpp"
-
 namespace lasd {
 
 /* ************************************************************************** */
 
 /*** TraversableContainer class ***/
     template<typename Data>
-    bool TraversableContainer<Data>::Exists(const Data &target) const {
+    bool TraversableContainer<Data>::Exists(const Data &target) const noexcept {
         bool found = false;
         Traverse([&found, &target](const Data &data) {
             if (data == target) {

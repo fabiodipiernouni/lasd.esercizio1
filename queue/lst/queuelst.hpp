@@ -45,13 +45,13 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy assignment
-        virtual inline QueueLst &operator=(const QueueLst<Data> &queue) {
+        virtual inline QueueLst<Data> &operator=(const QueueLst<Data> &queue) {
             List<Data>::operator=(queue);
             return *this;
         };
 
         // Move assignment
-        virtual inline QueueLst &operator=(QueueLst<Data> &&) noexcept {
+        virtual inline QueueLst<Data> &operator=(QueueLst<Data> && queue) noexcept {
             List<Data>::operator=(std::move(queue));
             return *this;
         };
@@ -59,11 +59,11 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Comparison operators
-        virtual bool operator==(const QueueLst<Data> &) const noexcept {
+        virtual bool operator==(const QueueLst<Data> & queue) const noexcept {
             return List<Data>::operator==(queue);
         };
 
-        virtual bool operator!=(const QueueLst<Data> &) const noexcept {
+        virtual bool operator!=(const QueueLst<Data> & queue) const noexcept {
             return List<Data>::operator!=(queue);
         };
 
@@ -97,5 +97,7 @@ namespace lasd {
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "queuelst.cpp"
 
 #endif

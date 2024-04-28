@@ -143,4 +143,6 @@ namespace lasd {
 
 }// namespace lasd
 
+#include "linear.cpp"
+
 #endif

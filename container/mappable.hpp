@@ -219,4 +219,6 @@ namespace lasd {
 
 }// namespace lasd
 
+#include "mappable.cpp"
+
 #endif

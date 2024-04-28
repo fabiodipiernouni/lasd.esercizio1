@@ -1,4 +1,3 @@
-
 #ifndef STACKVEC_HPP
 #define STACKVEC_HPP
 
@@ -19,23 +18,21 @@ namespace lasd {
      private:
         const unsigned long int chunkSize = 32;
 
-
      protected:
         using Vector<Data>::elements;
 
-        unsigned long int top = -1;
+        long int top = -1;
 
      public:
         // Default constructor
-        StackVec<Data>() : Vector<Data>(chunkSize) {  };
-        
+        StackVec() : Vector<Data>(chunkSize){};
 
         /* ************************************************************************ */
 
         // Specific constructor
 
         // A stack obtained from a TraversableContainer
-        StackVec(const TraversableContainer<Data>&);
+        StackVec(const TraversableContainer<Data> &);
 
         // A stack obtained from a MappableContainer
         StackVec(MappableContainer<Data> &&);
@@ -43,12 +40,12 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy constructor
-        inline StackVec(const StackVec<Data>& stack): Vector<Data>(stack) {
+        inline StackVec(const StackVec<Data> &stack) : Vector<Data>(stack) {
             top = stack.top;
         }
 
         // Move constructor
-        inline StackVec(StackVec<Data>&& stack) noexcept : Vector<Data>(std::move(stack)) {
+        inline StackVec(StackVec<Data> &&stack) noexcept : Vector<Data>(std::move(stack)) {
             top = stack.top;
             stack.Clear();
         }
@@ -61,35 +58,39 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy assignment
-        virtual StackVec<Data> operator=(const StackVec<Data>&) noexcept;
+        virtual StackVec<Data> operator=(const StackVec<Data> &) noexcept;
 
         // Move assignment
-        virtual StackVec<Data> operator=(StackVec<Data>&&) noexcept;
+        virtual StackVec<Data> operator=(StackVec<Data> &&) noexcept;
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const StackVec<Data>&) const noexcept;
-        inline bool operator!=(const StackVec<Data>&) const noexcept { return !operator==(stack); };
+        bool operator==(const StackVec<Data> &) const noexcept;
+        inline bool operator!=(const StackVec<Data> &stack) const noexcept { return !operator==(stack); };
 
         /* ************************************************************************ */
 
         // Specific member functions (inherited from Stack)
 
         // Override Stack member (non-mutable version; throw std::length_error when empty)
-        virtual inline const Data& Top() const override { return Vector<Data>::operator[](top); };
+        virtual inline const Data &Top() const override { return Vector<Data>::operator[](top); };
         // Override Stack member (mutable version; throw std::length_error when empty)
-        virtual inline Data& Top() override { return Vector<Data>::operator[](top); };
+        virtual inline Data &Top() override { return Vector<Data>::operator[](top); };
         // Override Stack member (throw std::length_error when empty)
         virtual inline void Pop() override;
         // Override Stack member (throw std::length_error when empty)
-        virtual inline Data TopNPop() override { Data temp = Top(); Pop(); return temp; };
+        virtual inline Data TopNPop() override {
+            Data temp = Top();
+            Pop();
+            return temp;
+        };
 
         // Override Stack member (copy of the value)
-        virtual void Push(const Data&) override;
+        virtual void Push(const Data &) override;
 
         // Override Stack member (move of the value)
-        virtual void Push(Data&&) override;
+        virtual void Push(Data &&) override;
 
         /* ************************************************************************ */
 
@@ -109,15 +110,17 @@ namespace lasd {
         virtual void Clear() noexcept override;
 
         // Override ResizableContainer member
-        virtual void Resize (const unsigned long newSize) noexcept override;
-
+        virtual void Resize(const unsigned long newSize) noexcept override;
 
      protected:
         // Auxiliary functions, if necessary!
+        inline bool Full() const noexcept { return top == (long)((this->Size() - 1)); };
     };
 
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "stackvec.cpp"
 
 #endif

@@ -1,13 +1,11 @@
-
-#include "vector.hpp"
-
 namespace lasd {
 
     /* ************************************************************************** */
 
     /*** Vector class ***/
     template<typename Data>
-    Vector<Data>::Vector(const unsigned long int initialSize) : size(initialSize) {
+    Vector<Data>::Vector(const unsigned long int initialSize) {
+        size = initialSize;
         elements = new Data[initialSize];
     }
 
@@ -18,14 +16,14 @@ namespace lasd {
     }
 
     template<typename Data>
-    Vector<Data>::Vector(const MappableContainer<Data> &container) : Vector(container.Size()) {
+    Vector<Data>::Vector(MappableContainer<Data> &&container) : Vector(container.Size()) {
         unsigned long idx = 0;
         container.Map([this, &idx](Data &val) { this->elements[idx++] = std::move(val); });
     }
 
     template<typename Data>
-    void Vector<Data>::Copy(const Vector &vector) {
-        if (this.elements != nullptr) delete[] elements;
+    void Vector<Data>::Copy(const Vector<Data> &vector) {
+        if (this->elements != nullptr) delete[] elements;
 
         size = vector.size;
         elements = new Data[size];
@@ -35,12 +33,14 @@ namespace lasd {
     }
 
     template<typename Data>
-    Vector<Data>::Vector(const Vector &vector) {
-        this.Copy(vector);
+    Vector<Data>::Vector(const Vector<Data> &vector) {
+        this->Copy(vector);
     }
 
     template<typename Data>
-    Vector<Data>::Vector(Vector &&vector) noexcept : size(vector.size), elements(vector.elements) {
+    Vector<Data>::Vector(Vector<Data> &&vector) noexcept {
+        size = vector.size;
+        elements = std::move(vector.elements);
         vector.size = 0;
         vector.elements = nullptr;
     }
@@ -52,16 +52,16 @@ namespace lasd {
     }
 
     template<typename Data>
-    Vector<Data> &Vector<Data>::operator=(const Vector &vector) {
+    Vector<Data> &Vector<Data>::operator=(const Vector<Data> &vector) {
         if (this != &vector) {
-            this.Copy(vector);
+            this->Copy(vector);
         }
 
         return *this;
     }
 
     template<typename Data>
-    Vector<Data> &Vector<Data>::operator=(Vector &&vector) noexcept {
+    Vector<Data> &Vector<Data>::operator=(Vector<Data> &&vector) noexcept {
         if (this != &vector) {
             if (elements != nullptr) delete[] elements;
 
@@ -76,7 +76,7 @@ namespace lasd {
     }
 
     template<typename Data>
-    bool Vector<Data>::operator==(const Vector &vector) const noexcept {
+    bool Vector<Data>::operator==(const Vector<Data> &vector) const noexcept {
         if (size != vector.size) return false;
 
         for (unsigned long i = 0; i < size; i++) {
@@ -87,14 +87,14 @@ namespace lasd {
     }
 
     template<typename Data>
-    void Vector<Data>::Clear() {
+    void Vector<Data>::Clear() noexcept {
         if (elements != nullptr) delete[] elements;
         size = 0;
         elements = nullptr;
     }
 
     template<typename Data>
-    void Vector<Data>::Resize(const unsigned long newSize) {
+    void Vector<Data>::Resize(const unsigned long newSize) noexcept {
         Data *newElements = new Data[newSize];
         unsigned long minSize = (size < newSize) ? size : newSize;
 
@@ -156,14 +156,14 @@ namespace lasd {
 
     // Copy assignment
     template<typename Data>
-    inline SortableVector<Data> &SortableVector<Data>::operator=(const SortableVector &sv) {
+    inline SortableVector<Data> &SortableVector<Data>::operator=(const SortableVector<Data> &sv) {
         Vector<Data>::operator=(sv);
         return *this;
     };
 
     // Move assignment
     template<typename Data>
-    inline SortableVector<Data> &SortableVector<Data>::operator=(SortableVector &&sv) noexcept {
+    inline SortableVector<Data> &SortableVector<Data>::operator=(SortableVector<Data> &&sv) noexcept {
         Vector<Data>::operator=(std::move(sv));
         return *this;
     };

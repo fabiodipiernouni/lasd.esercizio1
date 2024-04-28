@@ -1,5 +1,3 @@
-#include "stacklst.hpp"
-
 namespace lasd {
 
     /* ************************************************************************** */
@@ -8,7 +6,7 @@ namespace lasd {
 
     template<typename Data>
     StackLst<Data>::StackLst(const TraversableContainer<Data> &container) noexcept {
-        container.Map([this](const Data &val) { this->Push(val); });
+        container.Traverse([this](const Data &val) { this->Push(val); });
     }
 
     template<typename Data>

@@ -262,4 +262,6 @@ namespace lasd {
 
 }// namespace lasd
 
+#include "traversable.cpp"
+
 #endif

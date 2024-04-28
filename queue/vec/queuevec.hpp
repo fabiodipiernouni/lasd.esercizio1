@@ -7,6 +7,8 @@
 #include "../../vector/vector.hpp"
 #include "../queue.hpp"
 
+#define INIT_SIZE 32
+
 /* ************************************************************************** */
 
 namespace lasd {
@@ -17,22 +19,22 @@ namespace lasd {
     class QueueVec : virtual public Queue<Data>, virtual protected Vector<Data> {
 
      private:
-        const unsigned long int chunkSize = 32;
+        const unsigned long int chunkSize = INIT_SIZE;
 
-        inline unsigned long int QueueLength() { return (rear - front + size) % size;}
+        inline unsigned long int QueueLength() const { return (rear - front + size) % size; }
 
-        inline unsigned long int QueueSize() { return size; }
+        inline unsigned long int QueueSize() const { return size; }
 
      protected:
         using Vector<Data>::elements;
         using Vector<Data>::size;
 
-        unsigned long int front = -1;
-        unsigned long int rear = -1;
+        long int front = -1;
+        long int rear = -1;
 
      public:
         // Default constructor
-        inline QueueVec<Data>() : Vector<Data>(chunkSize) {};
+        inline QueueVec<Data>() : Vector<Data>(INIT_SIZE){};
 
         /* ************************************************************************ */
 
@@ -94,16 +96,16 @@ namespace lasd {
         // Specific member functions (inherited from Queue)
 
         // Override Queue member (non-mutable version; throw std::length_error when empty)
-        virtual inline Data const &front() const override;
+        virtual inline Data const &Head() const override;
 
         // Override Queue member (mutable version; throw std::length_error when empty)
-        virtual inline Data &front() override;
+        virtual inline Data &Head() override;
 
         // Override Queue member (throw std::length_error when empty)
         virtual void Dequeue() override;
 
         // throw std::length_error when empty
-        using Queue<Data>::HeadNDequeue();// using not needed, just to make code more readable
+        using Queue<Data>::HeadNDequeue; // using not needed, just to make code more readable
 
         // Override Queue member (copy of the value)
         virtual void Enqueue(const Data &value) override;
@@ -127,21 +129,24 @@ namespace lasd {
 
         // Override ClearableContainer member
         inline void Clear() noexcept override {
-            front = -1; rear = -1; 
+            front = -1;
+            rear = -1;
             Vector<Data>::Clear();
             elements = new Data[chunkSize];
         }
 
         // Override ResizableContainer member
-        virtual void Resize (const unsigned long newSize) noexcept override;
+        virtual void Resize(const unsigned long newSize) noexcept override;
 
      protected:
         // Auxiliary functions, if necessary!
-        inline bool Full() noexcept const { return ((rear + 1) % size) == front; } // if rear circulary incremented is equal to front, means that the queue is full
+        inline bool Full() const noexcept { return ((rear + 1) % ((long)size)) == front; } // if rear circulary incremented is equal to front, means that the queue is full
     };
 
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "queuevec.cpp"
 
 #endif

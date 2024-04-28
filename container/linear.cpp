@@ -1,4 +1,3 @@
-#include "linear.hpp"
 #include "mappable.hpp"
 
 namespace lasd {
@@ -46,7 +45,7 @@ namespace lasd {
         if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no back element");
 
-        return (*this)[Size() - 1];
+        return (*this)[this->Size() - 1];
     }
 
     template<typename Data>
@@ -66,12 +65,12 @@ namespace lasd {
 
     template<typename Data>
     void LinearContainer<Data>::PreOrderTraverse(const typename TraversableContainer<Data>::TraverseFun traverseFun) const {
-        return this.Traverse(traverseFun);
+        return this->Traverse(traverseFun);
     }
 
     template<typename Data>
     void LinearContainer<Data>::PostOrderTraverse(const typename TraversableContainer<Data>::TraverseFun traverseFun) const {
-        for (unsigned long i{Size() - 1}; i >= 0; i--) {
+        for (unsigned long i{this->Size() - 1}; i >= 0; i--) {
             traverseFun((*this)[i]);
         }
     }

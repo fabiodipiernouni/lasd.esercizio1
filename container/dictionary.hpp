@@ -50,22 +50,23 @@ namespace lasd {
         virtual bool Remove(const Data &) = 0;
 
         // type InsertAll(argument) specifiers; // Copy of the value; From TraversableContainer; True if all are inserted
-        virtual inline bool InsertAll(const TraversableContainer<Data> &);
+        virtual bool InsertAll(const TraversableContainer<Data> &);
         // type InsertAll(argument) specifiers; // Move of the value; From MappableContainer; True if all are inserted
-        virtual inline bool InsertAll(MappableContainer<Data> &&);
+        virtual bool InsertAll(MappableContainer<Data> &&);
         // type RemoveAll(argument) specifiers; // From TraversableContainer; True if all are removed
-        virtual inline bool RemoveAll(const TraversableContainer<Data> &);
+        virtual bool RemoveAll(const TraversableContainer<Data> &);
 
         // type InsertSome(argument) specifiers; // Copy of the value; From TraversableContainer; True if some is inserted
-        virtual inline bool InsertSome(const TraversableContainer<Data> &);
+        virtual bool InsertSome(const TraversableContainer<Data> &);
         // type InsertSome(argument) specifiers; // Move of the value; From MappableContainer; True if some is inserted
-        virtual inline bool InsertSome(MappableContainer<Data> &&);
+        virtual bool InsertSome(MappableContainer<Data> &&);
         // type RemoveSome(argument) specifiers; // From TraversableContainer; True if some is removed
-        virtual inline bool RemoveSome(const TraversableContainer<Data> &);
+        virtual bool RemoveSome(const TraversableContainer<Data> &);
     };
 
     /* ************************************************************************** */
 
 }// namespace lasd
 
+#include "dictionary.cpp"
 #endif

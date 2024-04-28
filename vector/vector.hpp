@@ -35,15 +35,15 @@ namespace lasd {
         Vector(const TraversableContainer<Data> &);
 
         // A vector obtained from a MappableContainer
-        Vector(const MappableContainer<Data> &);
+        Vector(MappableContainer<Data> &&);
 
         /* ************************************************************************ */
 
         // Copy constructor
-        Vector(const Vector &);
+        Vector(const Vector<Data> &);
 
         // Move constructor
-        Vector(Vector &&) noexcept;
+        Vector(Vector<Data> &&) noexcept;
 
         /* ************************************************************************ */
 
@@ -53,16 +53,16 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy assignment
-        Vector &operator=(const Vector &);
+        Vector<Data> &operator=(const Vector<Data> &);
 
         // Move assignment
-        Vector &operator=(Vector &&) noexcept;
+        Vector<Data> &operator=(Vector<Data> &&) noexcept;
 
         /* ************************************************************************ */
 
         // Comparison operators
-        bool operator==(const Vector &) const noexcept;
-        inline bool operator!=(const Vector &other) const noexcept { return !operator==(other); };
+        bool operator==(const Vector<Data> &) const noexcept;
+        inline bool operator!=(const Vector<Data> &other) const noexcept { return !operator==(other); };
 
         /* ************************************************************************ */
 
@@ -137,48 +137,28 @@ namespace lasd {
         inline SortableVector(const TraversableContainer<Data> &container) : Vector<Data>(container), SortableLinearContainer<Data>(){};
 
         // A vector obtained from a MappableContainer
-        inline SortableVector(const MappableContainer<Data> &container) : Vector<Data>(container), SortableLinearContainer<Data>(){};
+        inline SortableVector(MappableContainer<Data> &&container) : Vector<Data>(std::move(container)) {};
 
         /* ************************************************************************ */
 
         // Copy constructor
-        inline SortableVector(const SortableVector &sv) : Vector<Data>(sv){};
+        inline SortableVector(const SortableVector<Data> &sv) : Vector<Data>(sv){};
 
         // Move constructor
-        inline SortableVector(SortableVector &&sv) noexcept : Vector<Data>(std::move(sv)){};
+        inline SortableVector(SortableVector<Data> &&sv) noexcept : Vector<Data>(std::move(sv)){};
 
         /* ************************************************************************ */
 
         // Destructor
-        virtual inline ~SortableVector() = default;
+        virtual ~SortableVector() = default;
 
         /* ************************************************************************ */
 
         // Copy assignment
-        inline SortableVector &operator=(const SortableVector &);
+        inline SortableVector<Data> &operator=(const SortableVector<Data> &);
 
         // Move assignment
-        inline SortableVector &operator=(SortableVector &&) noexcept;
-
-        /*virtual void Traverse(typename TraversableContainer<Data>::TraverseFun fun) const override {
-            for (unsigned long i = 0; i < size; i++) {
-                fun(elements[i]);
-            }
-        }
-
-        virtual void Map(typename MappableContainer<Data>::MapFun fun) override {
-            for (unsigned long i = 0; i < size; i++) {
-                elements[i] = fun(elements[i]);
-            }
-        }
-
-        virtual void PreOrderTraverse(typename PreOrderTraversableContainer<Data>::TraverseFun fun) const override {
-            for (unsigned long i = 0; i < size; i++) {
-                fun(elements[i]);
-            }
-        }
-
-        virtual*/
+        inline SortableVector<Data> &operator=(SortableVector<Data> &&) noexcept;
 
      protected:
         int DataComparison(const Data &dataLeft, const Data &dataRight) const noexcept override {
@@ -194,5 +174,7 @@ namespace lasd {
     /* ************************************************************************** */
 
 }// namespace lasd
+
+#include "vector.cpp"
 
 #endif
