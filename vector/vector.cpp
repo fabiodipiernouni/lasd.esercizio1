@@ -11,20 +11,21 @@ namespace lasd {
 
     template<typename Data>
     Vector<Data>::Vector(const TraversableContainer<Data> &container) : Vector(container.Size()) {
-        std::cout  << "Vector(Data) TraversableContainer constructor, container.size is " << container.Size() << std::endl;
+        //std::cout  << "Vector(Data) TraversableContainer constructor, container.size is " << container.Size() << std::endl;
         container.Traverse([this](const Data &val) { this->elements[this->size++] = val; });
-        std::cout << "Vector(Data) TraversableContainer constructor, size now is " << this->size << std::endl;
+        //std::cout << "Vector(Data) TraversableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
     Vector<Data>::Vector(MappableContainer<Data> &&container) : Vector(container.Size()) {
-        std::cout  << "Vector(Data) MappableContainer constructor, container.size is " << container.Size() << std::endl;
+        //std::cout  << "Vector(Data) MappableContainer constructor, container.size is " << container.Size() << std::endl;
         container.Map([this](Data &val) { this->elements[this->size++] = std::move(val); });
-        std::cout << "Vector(Data) MappableContainer constructor, size now is " << this->size << std::endl;
+        //std::cout << "Vector(Data) MappableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
     void Vector<Data>::Copy(const Vector<Data> &vector) {
+
         //std::cout << "ATTENZIONE eseguo copia di un Vector con size " << vector.size << std::endl;
         if (this->elements != nullptr) delete[] elements;
 

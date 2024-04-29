@@ -283,11 +283,11 @@ namespace lasd {
         //std::cout << std::endl << "ATTENZIONE List<Data>::PostOrderTraverse size: " << this->Size() << std::endl;
 
         if (from == nullptr) {
-            std::cout << "from is nullptr" << std::endl;
+            //std::cout << "from is nullptr" << std::endl;
             return;
         }
         PostOrderTraverse(fun, from->next);
-        std::cout << "Calling fun on from " << from->data << std::endl;
+        //std::cout << "Calling fun on from " << from->data << std::endl;
         fun(from->data);
     }
 

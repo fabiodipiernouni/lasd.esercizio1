@@ -84,7 +84,7 @@ namespace lasd {
     void QueueVec<Data>::Resize(unsigned long newSize) noexcept {
         if (newSize % chunkSize != 0) {
             newSize = ((newSize / chunkSize) + 1) * chunkSize;// Round up to the nearest multiple of chunkSize
-            std::cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << std::endl;
+            //std::cout << "WARNING - new size is not a multiple of chunk size, resizing to the nearest multiple of chunk size: " << newSize << std::endl;
         }
 
         try {

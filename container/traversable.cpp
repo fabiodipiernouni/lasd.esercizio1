@@ -49,7 +49,7 @@ namespace lasd {
     template<typename Data>
     template<typename Accumulator>
     Accumulator PostOrderTraversableContainer<Data>::PostOrderFold(FoldFun<Accumulator> foldFun, const Accumulator &init) const {
-        std::cout << "Chiamo PostOrderTraversableContainer<Data>::PostOrderFold" << std::endl;
+        //std::cout << "Chiamo PostOrderTraversableContainer<Data>::PostOrderFold" << std::endl;
         Accumulator accumulator = init;
         PostOrderTraverse([&foldFun, &accumulator](const Data &data) {
             accumulator = foldFun(data, accumulator);

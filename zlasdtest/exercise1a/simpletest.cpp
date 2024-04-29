@@ -149,8 +149,8 @@ void stestVectorString(uint & testnum, uint & testerr) {
     FoldPreOrder(loctestnum, loctesterr, copvec, true, &FoldStringConcatenate, string("?"), string("?A !B !"));
     //cout << "ATTENZIONE creo movvec con vec che ha size " << vec.Size() << endl;
 
-    cout << "Printing Vec" << endl;
-    vec.PrintAll();
+    //cout << "Printing Vec" << endl;
+    //vec.PrintAll();
 
     lasd::SortableVector<string> movvec(move(vec));
     FoldPreOrder(loctestnum, loctesterr, movvec, true, &FoldStringConcatenate, string("?"), string("?A B "));
