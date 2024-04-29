@@ -5,24 +5,27 @@ namespace lasd {
     /*** Vector class ***/
     template<typename Data>
     Vector<Data>::Vector(const unsigned long int initialSize) {
-        size = initialSize;
         elements = new Data[initialSize];
+        size = initialSize;
     }
 
     template<typename Data>
     Vector<Data>::Vector(const TraversableContainer<Data> &container) : Vector(container.Size()) {
-        unsigned long idx = 0;
-        container.Traverse([this, &idx](const Data &val) { this->elements[idx++] = val; });
+        std::cout  << "Vector(Data) TraversableContainer constructor, container.size is " << container.Size() << std::endl;
+        container.Traverse([this](const Data &val) { this->elements[this->size++] = val; });
+        std::cout << "Vector(Data) TraversableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
     Vector<Data>::Vector(MappableContainer<Data> &&container) : Vector(container.Size()) {
-        unsigned long idx = 0;
-        container.Map([this, &idx](Data &val) { this->elements[idx++] = std::move(val); });
+        std::cout  << "Vector(Data) MappableContainer constructor, container.size is " << container.Size() << std::endl;
+        container.Map([this](Data &val) { this->elements[this->size++] = std::move(val); });
+        std::cout << "Vector(Data) MappableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
     void Vector<Data>::Copy(const Vector<Data> &vector) {
+        //std::cout << "ATTENZIONE eseguo copia di un Vector con size " << vector.size << std::endl;
         if (this->elements != nullptr) delete[] elements;
 
         size = vector.size;
@@ -39,21 +42,23 @@ namespace lasd {
 
     template<typename Data>
     Vector<Data>::Vector(Vector<Data> &&vector) noexcept {
-        size = vector.size;
-        elements = std::move(vector.elements);
-        vector.size = 0;
-        vector.elements = nullptr;
+        //std::cout << "ATTENZIONE eseguo spostamento di un Vector con size " << vector.size << std::endl;
+        std::swap(size, vector.size);
+        std::swap(elements, vector.elements);
     }
 
     template<typename Data>
     Vector<Data>::~Vector() {
-        if (elements != nullptr)
+        if (elements != nullptr) {
             delete[] elements;
+            elements = nullptr;
+        }
     }
 
     template<typename Data>
     Vector<Data> &Vector<Data>::operator=(const Vector<Data> &vector) {
         if (this != &vector) {
+            //std::cout << "ATTENZIONE eseguo assegnamento di un Vector con size " << vector.size << std::endl;
             this->Copy(vector);
         }
 
@@ -63,13 +68,11 @@ namespace lasd {
     template<typename Data>
     Vector<Data> &Vector<Data>::operator=(Vector<Data> &&vector) noexcept {
         if (this != &vector) {
+            //std::cout << "ATTENZIONE eseguo assegnamento con spostamento di un Vector con size " << vector.size << std::endl;
             if (elements != nullptr) delete[] elements;
 
             size = vector.size;
-            elements = vector.elements;
-
-            vector.size = 0;
-            vector.elements = nullptr;
+            elements = std::move(vector.elements);
         }
 
         return *this;

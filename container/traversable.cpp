@@ -32,9 +32,12 @@ namespace lasd {
     template<typename Data>
     template<typename Accumulator>
     Accumulator PreOrderTraversableContainer<Data>::PreOrderFold(FoldFun<Accumulator> fun, const Accumulator &acc) const {
+        //std::cout << "ATTENZIONE CHIAMO PreOrderTraversableContainer<Data>::PreOrderFold (size: " << this->Size() << ")" << std::endl;
         Accumulator accumulator = acc;
         PreOrderTraverse([&fun, &accumulator](const Data &data) {
-            accumulator = fun(accumulator, data);
+            //std::cout << "ATTENZIONE accumulator prima: " << accumulator << std::endl;
+            accumulator = fun(data, accumulator);
+            //std::cout << "ATTENZIONE accumulator dopo: " << accumulator << std::endl;
         });
         return accumulator;
     }
@@ -46,9 +49,10 @@ namespace lasd {
     template<typename Data>
     template<typename Accumulator>
     Accumulator PostOrderTraversableContainer<Data>::PostOrderFold(FoldFun<Accumulator> foldFun, const Accumulator &init) const {
+        std::cout << "Chiamo PostOrderTraversableContainer<Data>::PostOrderFold" << std::endl;
         Accumulator accumulator = init;
         PostOrderTraverse([&foldFun, &accumulator](const Data &data) {
-            accumulator = foldFun(accumulator, data);
+            accumulator = foldFun(data, accumulator);
         });
         return accumulator;
     }

@@ -70,8 +70,12 @@ namespace lasd {
 
     template<typename Data>
     void LinearContainer<Data>::PostOrderTraverse(const typename TraversableContainer<Data>::TraverseFun traverseFun) const {
-        for (unsigned long i{this->Size() - 1}; i >= 0; i--) {
+        if(this->Size() == 0) return;
+        //std::cout << "ATTENZIONE LinearContainer<Data>::PostOrderTraverse size: " << this->size << std::endl;
+        for (unsigned long i{this->size - 1}; i >= 0; i--) {
+            std::cout << "i: " << i << std::endl;
             traverseFun((*this)[i]);
+            if(i == 0) break;
         }
     }
 
@@ -91,6 +95,7 @@ namespace lasd {
     void LinearContainer<Data>::PostOrderMap(typename MappableContainer<Data>::MapFun mf) {
         for (unsigned long i{this->Size() - 1}; i >= 0; i--) {
             mf((*this)[i]);
+            if(i == 0) break;
         }
     }
 

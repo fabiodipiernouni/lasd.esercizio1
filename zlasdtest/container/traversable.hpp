@@ -82,7 +82,7 @@ void FoldPreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraversabl
   bool tst;
   testnum++;
   try {
-    std::cout << " " << testnum << " (" << testerr << ") Executing fold in pre order - ";
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in pre order (inival: " << inival << ", finval: " << finval << ") - ";
     Value val = con.PreOrderFold(fun, inival);
     std::cout << "obtained value is \"" << val << "\": ";
     std::cout << ((tst = ((val == finval) == chk)) ? "Correct" : "Error") << "!" << std::endl;
@@ -102,9 +102,8 @@ void TraversePostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTrav
   bool tst = true;
   testnum++;
   try {
-    std::cout << " " << testnum << " (" << testerr << ") Executing traverse in post order - ";
     con.PostOrderTraverse(fun);
-    std::cout << ": " << ((tst = chk) ? "Correct" : "Error") << "!" << std::endl;
+    std::cout << ": " << ((tst == chk) ? "Correct" : "Error") << "!" << std::endl;
   }
   catch (std::exception & exc) {
     std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;

@@ -280,12 +280,20 @@ namespace lasd {
 
     template<typename Data>
     void List<Data>::PostOrderTraverse(TraverseFun fun, Node* from) const {
+        //std::cout << std::endl << "ATTENZIONE List<Data>::PostOrderTraverse size: " << this->Size() << std::endl;
+
+        if (from == nullptr) {
+            std::cout << "from is nullptr" << std::endl;
+            return;
+        }
         PostOrderTraverse(fun, from->next);
+        std::cout << "Calling fun on from " << from->data << std::endl;
         fun(from->data);
     }
 
     template<typename Data>
     void List<Data>::PostOrderTraverse(TraverseFun fun) const {
+        //std::cout << "ATTENZIONE eseguo void List<Data>::PostOrderTraverse(TraverseFun fun) const" << std::endl;
         PostOrderTraverse(fun, head);
     }
 
@@ -310,6 +318,9 @@ namespace lasd {
 
     template<typename Data>
     void List<Data>::PostOrderMap(MapFun mapFun, Node* from) {
+        if (from == nullptr) {
+            return;
+        }
         PostOrderMap(mapFun, from->next);
         mapFun(from->data);
     }

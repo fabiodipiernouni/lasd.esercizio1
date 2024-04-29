@@ -22,7 +22,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline Vector<Data>() = default;
+        inline Vector<Data>() { this->size = 0;};
 
         /* ************************************************************************ */
 
@@ -97,6 +97,12 @@ namespace lasd {
         // Override (Mutable) LinearContainer member (must throw std::length_error when empty)
         virtual Data &Back() override;
 
+        virtual inline void PrintAll() {
+            unsigned long int i = 0;
+            this->Traverse([&i](const Data &data) { std::cout << "ARRAY - DATO" << i << " : " << data << std::endl; });
+        }
+
+
      protected:
         // Auxiliary functions, if necessary!
 
@@ -159,6 +165,7 @@ namespace lasd {
 
         // Move assignment
         inline SortableVector<Data> &operator=(SortableVector<Data> &&) noexcept;
+
 
      protected:
         int DataComparison(const Data &dataLeft, const Data &dataRight) const noexcept override {
