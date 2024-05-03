@@ -18,11 +18,6 @@
 
 using namespace std;
 
-typedef unsigned long int ulong;
-typedef unsigned short int ushort;
-typedef unsigned int uint;
-
-
 /* ************************************************************************** */
 
 void stestVectorInt(uint & testnum, uint & testerr) {
@@ -144,13 +139,8 @@ void stestVectorString(uint & testnum, uint & testerr) {
     MapPreOrder(loctestnum, loctesterr, vec, true, [](string & str) { MapStringAppend(str, string("!")); });
     NonEqualVector(loctestnum, loctesterr, vec, copvec, true);
 
-    //cout << "ATTENZIONE creo copvec con vec che ha size " << vec.Size() << endl;
     copvec = move(vec);
     FoldPreOrder(loctestnum, loctesterr, copvec, true, &FoldStringConcatenate, string("?"), string("?A !B !"));
-    //cout << "ATTENZIONE creo movvec con vec che ha size " << vec.Size() << endl;
-
-    //cout << "Printing Vec" << endl;
-    //vec.PrintAll();
 
     lasd::SortableVector<string> movvec(move(vec));
     FoldPreOrder(loctestnum, loctesterr, movvec, true, &FoldStringConcatenate, string("?"), string("?A B "));

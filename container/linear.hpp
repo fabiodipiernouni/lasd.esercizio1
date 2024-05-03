@@ -132,7 +132,7 @@ namespace lasd {
 
      protected:
         // DataComparison must returns 0 if the two data are equals, 1 if the first is greater than the second, -1 otherwise
-        virtual int DataComparison(const Data &, const Data &) const noexcept = 0;
+        virtual int DataComparison(const Data &, const Data &) const = 0;
 
         virtual inline void SortEntryProcess(unsigned long int start, unsigned long int end) noexcept {
             mergeSort(start, end);

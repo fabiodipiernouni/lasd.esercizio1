@@ -36,10 +36,14 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy constructor
-        inline StackLst(const StackLst<Data> &stack) : List<Data>(stack) {}
+        inline StackLst(const StackLst<Data> &stack) : List<Data>(stack) {
+            //std::cout << "Invocato costruttore copia const." << std::endl;
+        }
 
         // Move constructor
-        inline StackLst(StackLst<Data> &&stack) noexcept : List<Data>(std::move(stack)) {}
+        inline StackLst(StackLst<Data> &&stack) noexcept : List<Data>(std::move(stack)) {
+            //std::cout << "Invocato costruttore copia move." << std::endl;
+        }
 
         /* ************************************************************************ */
 
@@ -85,16 +89,25 @@ namespace lasd {
         inline Data TopNPop() override { return List<Data>::FrontNRemove(); }
 
         // Override Stack member (copy of the value)
-        inline void Push(const Data& value) override { List<Data>::InsertAtFront(value); }
+        inline void Push(const Data& value) override {
+            //std::cout << "Richiamato StackLst<Data>::Push(Copy) per value " << value << std::endl;
+            List<Data>::InsertAtFront(value); }
 
         // Override Stack member (move of the value)
-        inline void Push(Data&& value) override { List<Data>::InsertAtFront(std::move(value)); }
+        inline void Push(Data&& value) override {
+            //std::cout << "Richiamato StackLst<Data>::Push(Copy) per value " << value << std::endl;
+            List<Data>::InsertAtFront(std::move(value)); }
 
         /* ************************************************************************ */
 
         // Specific member function (inherited from ClearableContainer)
 
         using List<Data>::Clear;
+
+        /*virtual inline void PrintAll() const override {
+            //std::cout << "Printing StackLst elements:" << std::endl;
+            List<Data>::PrintAll();
+        }*/
 
      protected:
         // Auxiliary functions, if necessary!

@@ -73,7 +73,7 @@ namespace lasd {
         if(this->Size() == 0) return;
         //std::cout << "ATTENZIONE LinearContainer<Data>::PostOrderTraverse size: " << this->size << std::endl;
         for (unsigned long i{this->size - 1}; i >= 0; i--) {
-            std::cout << "i: " << i << std::endl;
+            //std::cout << "i: " << i << std::endl;
             traverseFun((*this)[i]);
             if(i == 0) break;
         }

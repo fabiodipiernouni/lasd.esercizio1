@@ -6,6 +6,8 @@
 #include "../../vector/vector.hpp"
 #include "../stack.hpp"
 
+#define CHUNKSIZE 32
+
 /* ************************************************************************** */
 
 namespace lasd {
@@ -16,7 +18,7 @@ namespace lasd {
     class StackVec : virtual public Stack<Data>, virtual protected Vector<Data> {
 
      private:
-        const unsigned long int chunkSize = 32;
+        const unsigned long int chunkSize = CHUNKSIZE;
 
      protected:
         using Vector<Data>::elements;
@@ -25,7 +27,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        StackVec() : Vector<Data>(chunkSize){};
+        StackVec() : Vector<Data>(CHUNKSIZE){};
 
         /* ************************************************************************ */
 
@@ -58,10 +60,10 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy assignment
-        virtual StackVec<Data> operator=(const StackVec<Data> &) noexcept;
+        virtual StackVec<Data> & operator=(const StackVec<Data> &) noexcept;
 
         // Move assignment
-        virtual StackVec<Data> operator=(StackVec<Data> &&) noexcept;
+        virtual StackVec<Data> & operator=(StackVec<Data> &&) noexcept;
 
         /* ************************************************************************ */
 
@@ -74,13 +76,20 @@ namespace lasd {
         // Specific member functions (inherited from Stack)
 
         // Override Stack member (non-mutable version; throw std::length_error when empty)
-        virtual inline const Data &Top() const override { return Vector<Data>::operator[](top); };
+        virtual inline const Data &Top() const override {
+            if(Empty()) throw std::length_error("Stack is empty");
+            return Vector<Data>::operator[](top);
+        };
         // Override Stack member (mutable version; throw std::length_error when empty)
-        virtual inline Data &Top() override { return Vector<Data>::operator[](top); };
+        virtual inline Data &Top() override {
+            if(Empty()) throw std::length_error("Stack is empty");
+            return Vector<Data>::operator[](top);
+        };
         // Override Stack member (throw std::length_error when empty)
         virtual inline void Pop() override;
         // Override Stack member (throw std::length_error when empty)
         virtual inline Data TopNPop() override {
+            if(Empty()) throw std::length_error("Stack is empty");
             Data temp = Top();
             Pop();
             return temp;
@@ -100,21 +109,28 @@ namespace lasd {
         virtual inline bool Empty() const noexcept override { return top == -1; };
 
         // Override Container member
-        virtual inline unsigned long int Size() const noexcept override { return top + 1; };
+        virtual inline unsigned long Size() const noexcept override { return top + 1; };
 
         /* ************************************************************************ */
 
         // Specific member function (inherited from ClearableContainer)
 
         // Override ClearableContainer member
-        virtual void Clear() noexcept override;
+        virtual inline void Clear() noexcept override { top = -1; };
 
         // Override ResizableContainer member
         virtual void Resize(const unsigned long newSize) noexcept override;
 
+        //virtual inline void PrintAll(long int max = -1) const override {
+            //std::cout << "Printing stackVec, top: " << top << std::endl;
+
+          //  Vector<Data>::PrintAll(this->Size());
+        //}
+
      protected:
         // Auxiliary functions, if necessary!
-        inline bool Full() const noexcept { return top == (long)((this->Size() - 1)); };
+        inline unsigned long int RealSize() const noexcept { return this->size; };
+        inline bool Full() const noexcept { return top == (long)((this->RealSize() - 1)); };
     };
 
     /* ************************************************************************** */

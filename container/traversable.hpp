@@ -55,7 +55,7 @@ namespace lasd {
         using FoldFun = std::function<Accumulator(const Data &, const Accumulator &)>;
 
         template<typename Accumulator>
-        Accumulator Fold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator Fold(FoldFun<Accumulator>, Accumulator) const;
 
         /* ************************************************************************ */
 
@@ -102,7 +102,7 @@ namespace lasd {
         using FoldFun = typename TraversableContainer<Data>::FoldFun<Accumulator>;
 
         template<typename Accumulator>
-        Accumulator PreOrderFold(FoldFun<Accumulator>, const Accumulator &) const;
+        Accumulator PreOrderFold(FoldFun<Accumulator>, Accumulator) const;
 
         /* ************************************************************************ */
 

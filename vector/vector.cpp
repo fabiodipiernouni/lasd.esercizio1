@@ -5,55 +5,71 @@ namespace lasd {
     /*** Vector class ***/
     template<typename Data>
     Vector<Data>::Vector(const unsigned long int initialSize) {
+        //std::cout << "sto per allocare un array di Data da " << initialSize << " elementi" << std::endl;
         elements = new Data[initialSize];
         size = initialSize;
     }
 
     template<typename Data>
-    Vector<Data>::Vector(const TraversableContainer<Data> &container) : Vector(container.Size()) {
-        //std::cout  << "Vector(Data) TraversableContainer constructor, container.size is " << container.Size() << std::endl;
-        container.Traverse([this](const Data &val) { this->elements[this->size++] = val; });
+    Vector<Data>::Vector(const TraversableContainer<Data> &container) : Vector(container.TraversableContainer<Data>::Size()) {
+        //std::cout << "Vector(Data) TraversableContainer constructor, container.size is " << container.TraversableContainer<Data>::Size() << std::endl;
+        unsigned long int idx = 0;
+        container.Traverse([this, &idx](const Data &val) { this->elements[idx++] = val; });
         //std::cout << "Vector(Data) TraversableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
-    Vector<Data>::Vector(MappableContainer<Data> &&container) : Vector(container.Size()) {
-        //std::cout  << "Vector(Data) MappableContainer constructor, container.size is " << container.Size() << std::endl;
-        container.Map([this](Data &val) { this->elements[this->size++] = std::move(val); });
+    Vector<Data>::Vector(MappableContainer<Data> &&container) : Vector(container.MappableContainer<Data>::Size()) {
+        //std::cout << "Vector(Data) MappableContainer constructor, container.size is " << container.MappableContainer<Data>::Size() << std::endl;
+        unsigned long int idx = 0;
+        container.Map([this, &idx](Data &val) { this->elements[idx++] = std::move(val); });
         //std::cout << "Vector(Data) MappableContainer constructor, size now is " << this->size << std::endl;
     }
 
     template<typename Data>
     void Vector<Data>::Copy(const Vector<Data> &vector) {
 
-        //std::cout << "ATTENZIONE eseguo copia di un Vector con size " << vector.size << std::endl;
-        if (this->elements != nullptr) delete[] elements;
+        //std::cout << "ATTENZIONE eseguo copia di un Vector con size " << vector.size << ", this->size: " << this->Vector<Data>::Size() << std::endl;
+        //std::cout << "Array vector parametro: " << std::endl;
+        //vector.PrintAll();
 
-        size = vector.size;
-        elements = new Data[size];
-        for (unsigned long i = 0; i < size; i++) {
+        //std::cout << "this->elements: " << elements << std::endl;
+        //std::cout << "this->Vector<Data>::Size(): " << this->Vector<Data>::Size() << std::endl;
+
+        if(vector.Vector<Data>::Size() == 0) {
+            Vector<Data>::Clear();
+            return;
+        }
+
+        if (elements == nullptr) {
+            //std::cout << "elements is nullptr, calling new" << std::endl;
+            elements = new Data[vector.size];
+        }
+
+        if (vector.Vector<Data>::Size() != this->Vector<Data>::Size()) {
+            //std::cout << "vector.Vector<Data>::Size() != this->Vector<Data>::Size => " << vector.Vector<Data>::Size() << " != " << this->Vector<Data>::Size() << std::endl;
+            Vector<Data>::Resize(vector.Vector<Data>::Size());
+            //std::cout << "Resize effettuato, size attuale: " << this->Vector<Data>::Size() << std::endl;
+        }
+
+        for (unsigned long i = 0; i < this->Vector<Data>::Size(); i++) {
             elements[i] = vector.elements[i];
         }
     }
 
     template<typename Data>
     Vector<Data>::Vector(const Vector<Data> &vector) {
+        //std::cout << "CALL COPY Vector<Data>::Vector(const Vector<Data> &vector)" << std::endl;
         this->Copy(vector);
     }
 
     template<typename Data>
     Vector<Data>::Vector(Vector<Data> &&vector) noexcept {
         //std::cout << "ATTENZIONE eseguo spostamento di un Vector con size " << vector.size << std::endl;
+        //std::cout << std::endl << "parametro vector prima di swap: " << std::endl;
+        //vector.PrintAll();
         std::swap(size, vector.size);
         std::swap(elements, vector.elements);
-    }
-
-    template<typename Data>
-    Vector<Data>::~Vector() {
-        if (elements != nullptr) {
-            delete[] elements;
-            elements = nullptr;
-        }
     }
 
     template<typename Data>
@@ -68,23 +84,24 @@ namespace lasd {
 
     template<typename Data>
     Vector<Data> &Vector<Data>::operator=(Vector<Data> &&vector) noexcept {
-        if (this != &vector) {
-            //std::cout << "ATTENZIONE eseguo assegnamento con spostamento di un Vector con size " << vector.size << std::endl;
-            if (elements != nullptr) delete[] elements;
 
-            size = vector.size;
-            elements = std::move(vector.elements);
-        }
+        std::swap(size, vector.size);
+        std::swap(elements, vector.elements);
 
         return *this;
     }
 
     template<typename Data>
     bool Vector<Data>::operator==(const Vector<Data> &vector) const noexcept {
-        if (size != vector.size) return false;
+        if (this->Vector<Data>::Size() != vector.Vector<Data>::Size()) {
+            //std::cout << "ATTENZIONE operator== ritorna false perchè size diversi: " << this->Vector<Data>::Size() << " != " << vector.Vector<Data>::Size() << std::endl;
+            return false;
+        }
 
-        for (unsigned long i = 0; i < size; i++) {
-            if (elements[i] != vector.elements[i]) return false;
+        if(Vector<Data>::Size() > 0) {
+            for (unsigned long i = 0; i < Vector<Data>::Size(); i++) {
+                if (elements[i] != vector.elements[i]) return false;
+            }
         }
 
         return true;
@@ -92,13 +109,16 @@ namespace lasd {
 
     template<typename Data>
     void Vector<Data>::Clear() noexcept {
-        if (elements != nullptr) delete[] elements;
+        //std::cout << "ATTENZIONE RICHIAMATO CLEAR eseguo delete[] di elements " << elements << std::endl;
+        delete[] elements;
         size = 0;
         elements = nullptr;
+        //std::cout << "ATTENZIONE ESEGUITO CLEAR di elements " << elements << std::endl;
     }
 
     template<typename Data>
     void Vector<Data>::Resize(const unsigned long newSize) noexcept {
+        //std::cout << "ATTENZIONE eseguo ridimensionamento di un Vector con size " << size << " a " << newSize << std::endl;
         Data *newElements = new Data[newSize];
         unsigned long minSize = (size < newSize) ? size : newSize;
 
@@ -106,7 +126,9 @@ namespace lasd {
             newElements[i] = elements[i];
         }
 
-        if (elements != nullptr) delete[] elements;
+        //std::cout << "ATTENZIONE effettuo delete[] di elements" << std::endl;
+        delete[] elements;
+        elements = nullptr;
 
         size = newSize;
         elements = newElements;

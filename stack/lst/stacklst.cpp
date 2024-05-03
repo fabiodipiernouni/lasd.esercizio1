@@ -6,12 +6,16 @@ namespace lasd {
 
     template<typename Data>
     StackLst<Data>::StackLst(const TraversableContainer<Data> &container) noexcept {
-        container.Traverse([this](const Data &val) { this->Push(val); });
+        //std::cout << "Invocato StackLst<Data>::StackLst(const TraversableContainer<Data> &container)" << std::endl;
+        container.Traverse([this](const Data &val) {
+            //std::cout << "Pushing value: " << val << std::endl;
+            this->List<Data>::InsertAtBack(val); });
     }
 
     template<typename Data>
     StackLst<Data>::StackLst(MappableContainer<Data> &&container) noexcept {
-        container.Map([this](Data &&val) { this->Push(std::move(val)); });
+        //std::cout << "Invocato StackLst<Data>::StackLst(MappableContainer<Data> &&container)" << std::endl;
+        container.Map([this](Data &val) { this->List<Data>::InsertAtBack(std::move(val)); });
     }
 
     template<typename Data>

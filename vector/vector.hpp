@@ -22,7 +22,7 @@ namespace lasd {
 
      public:
         // Default constructor
-        inline Vector<Data>() { this->size = 0;};
+        inline Vector<Data>() { this->size = 0; this->elements = nullptr; };
 
         /* ************************************************************************ */
 
@@ -48,7 +48,7 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Destructor
-        virtual ~Vector();
+        virtual inline ~Vector() { delete[] elements; };
 
         /* ************************************************************************ */
 
@@ -97,11 +97,19 @@ namespace lasd {
         // Override (Mutable) LinearContainer member (must throw std::length_error when empty)
         virtual Data &Back() override;
 
-        virtual inline void PrintAll() {
-            unsigned long int i = 0;
-            this->Traverse([&i](const Data &data) { std::cout << "ARRAY - DATO" << i << " : " << data << std::endl; });
-        }
-
+        /*virtual inline void PrintAll(long int max = -1) const {
+            try {
+                if (!this->Vector<Data>::Empty()) {
+                    //std::cout << std::endl << std::endl<< "VECTOR: " << std::endl;
+                    for (unsigned long int i = 0; i < (max == -1 ? this->Vector<Data>::Size() : (unsigned long int)max); i++) {
+                        //std::cout << "DATO " << i << " : " << this->elements[i] << std::endl;
+                    }
+                }
+                else
+                    //std::cout << "ARRAY VUOTO" << std::endl;
+            } catch (...) {
+            }
+        }*/
 
      protected:
         // Auxiliary functions, if necessary!
@@ -137,18 +145,20 @@ namespace lasd {
         // Specific constructors
 
         // A vector with a given initial dimension
-        inline SortableVector(const unsigned long int size) : Vector<Data>(size), SortableLinearContainer<Data>(){};
+        inline SortableVector(const unsigned long int size) : Vector<Data>(size){};
 
         // A vector obtained from a TraversableContainer
-        inline SortableVector(const TraversableContainer<Data> &container) : Vector<Data>(container), SortableLinearContainer<Data>(){};
+        inline SortableVector(const TraversableContainer<Data> &container) : Vector<Data>(container){};
 
         // A vector obtained from a MappableContainer
-        inline SortableVector(MappableContainer<Data> &&container) : Vector<Data>(std::move(container)) {};
+        inline SortableVector(MappableContainer<Data> &&container) : Vector<Data>(std::move(container)){};
 
         /* ************************************************************************ */
 
         // Copy constructor
-        inline SortableVector(const SortableVector<Data> &sv) : Vector<Data>(sv){};
+        inline SortableVector(const SortableVector<Data> &sv) : Vector<Data>(sv) {
+            //std::cout << std::endl << "chiamato SortableVector(const SortableVector<Data> &sv) : Vector<Data>(sv)" << std::endl;
+        };
 
         // Move constructor
         inline SortableVector(SortableVector<Data> &&sv) noexcept : Vector<Data>(std::move(sv)){};
@@ -156,7 +166,7 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Destructor
-        virtual ~SortableVector() = default;
+        virtual inline ~SortableVector() = default;
 
         /* ************************************************************************ */
 
@@ -166,9 +176,9 @@ namespace lasd {
         // Move assignment
         inline SortableVector<Data> &operator=(SortableVector<Data> &&) noexcept;
 
-
      protected:
-        int DataComparison(const Data &dataLeft, const Data &dataRight) const noexcept override {
+        // Auxiliary functions
+        virtual inline int DataComparison(const Data &dataLeft, const Data &dataRight) const override {
             if (compare != nullptr) {
                 return compare(dataLeft, dataRight);
             } else {

@@ -7,17 +7,26 @@ namespace lasd {
     /*** QueueVec class ***/
 
     template<typename Data>
-    inline QueueVec<Data>::QueueVec(const TraversableContainer<Data> &container) {
+    inline QueueVec<Data>::QueueVec(const TraversableContainer<Data> &container) : Vector<Data>(INIT_SIZE) {
+        //std::cout << "Invocato costruttore QueueVec(const TraversableContainer<Data> &container)" << std::endl;
+
+        //std::cout << "container.Size(): " << container.Size() << std::endl;
+
         container.Traverse([this](const Data &val) { this->Enqueue(val); });
     }
 
     template<typename Data>
-    inline QueueVec<Data>::QueueVec(MappableContainer<Data> &&container) {
+    inline QueueVec<Data>::QueueVec(MappableContainer<Data> &&container) : Vector<Data>(INIT_SIZE) {
+        //std::cout << "Invocato costruttore QueueVec(MappableContainer<Data> &&container)" << std::endl;
+
+        //std::cout << "container.Size(): " << container.Size() << std::endl;
+
         container.Map([this](Data &val) { this->Enqueue(std::move(val)); });
     }
 
     template<typename Data>
     inline Data const &QueueVec<Data>::Head() const {
+        //std::cout << "Invocato metodo const Head()" << std::endl;
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
@@ -27,6 +36,14 @@ namespace lasd {
 
     template<typename Data>
     inline Data &QueueVec<Data>::Head() {
+        //std::cout << "Invocato metodo Head()" << std::endl;
+
+        //std::cout << std::endl;
+
+        //PrintEnvs();
+
+        //std::cout << std::endl;
+
         if (Empty()) {
             throw std::length_error("Queue is empty");
         }
@@ -36,12 +53,12 @@ namespace lasd {
 
     template<typename Data>
     void QueueVec<Data>::Enqueue(const Data &val) {
-
+        //std::cout << "Invocato metodo Enqueue(const Data &val)" << std::endl;
         if (Empty()) {
             front = 0;
             rear = 0;
         } else {
-            if (Full()) { Resize(QueueSize() + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
+            if (Full() || QueueSize() == 0) { Resize(QueueSize() + chunkSize); }// if rear circulary incremented is equal to front, means that the queue is full
 
             rear = (rear + 1) % QueueSize();// Circular increment
         }
@@ -51,6 +68,7 @@ namespace lasd {
 
     template<typename Data>
     void QueueVec<Data>::Enqueue(Data &&val) {
+        //std::cout << "Invocato metodo Enqueue(Data &&val)" << std::endl;
         if (Empty()) {
             front = 0;
             rear = 0;
@@ -101,7 +119,7 @@ namespace lasd {
             front = 0;              // Resetta front
             rear = this->Size() - 1;// Resetta rear
         } catch (std::bad_alloc &e) {
-            std::cout << "ERROR - bad_alloc caught: " << e.what() << std::endl;
+            //std::cout << "ERROR - bad_alloc caught: " << e.what() << std::endl;
         }
     }
 

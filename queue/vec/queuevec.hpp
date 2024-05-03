@@ -21,7 +21,7 @@ namespace lasd {
      private:
         const unsigned long int chunkSize = INIT_SIZE;
 
-        inline unsigned long int QueueLength() const { return (rear - front + size) % size; }
+        inline unsigned long int QueueLength() const { return (Empty() ? 0 : (((rear - front + size) % size) + 1)); }
 
         inline unsigned long int QueueSize() const { return size; }
 
@@ -31,6 +31,23 @@ namespace lasd {
 
         long int front = -1;
         long int rear = -1;
+
+      //  inline void PrintEnvs() const noexcept {
+            //std::cout << "elements: " << elements << std::endl;
+            //std::cout << "front: " << front << ", rear: " << rear << std::endl;
+            //std::cout << "size: " << size << std::endl;
+            //std::cout << "QueueSize: " << QueueSize() << std::endl;
+            //std::cout << "QueueLength: " << QueueLength() << std::endl;
+            //std::cout << "Vector<Data>::Size(): " << Vector<Data>::Size() << std::endl;
+        //}
+
+        //inline void PrintAll() const noexcept {
+            //std::cout << "Printing QUEUEVEC:" << std::endl;
+          //  for (unsigned long i = 0; i < QueueLength(); i++) {
+            //    int index = (front + i) % QueueSize();
+                //std::cout << "elements[" << i << "]: " << elements[i] << std::endl;
+            //}
+        //}
 
      public:
         // Default constructor
@@ -49,17 +66,33 @@ namespace lasd {
 
         // Copy constructor
         // QueueVec(argument);
-        inline QueueVec<Data>(const QueueVec<Data> &queue) : Vector<Data>(queue) {
+        inline QueueVec<Data>(const QueueVec<Data> &queue) {
+            //std::cout << "QueueVec<Data> Copy constructor, queue parameter: " << std::endl;
+
+/*            queue.PrintEnvs();
+
+            Vector<Data>::Copy(queue);
+
             front = queue.front;
             rear = queue.rear;
+
+            //std::cout << "this PrintAll: " << std::endl;
+
+            this->PrintAll();*/
+            this->operator=(queue);
         }
 
         // Move constructor
         // QueueVec(argument);
-        inline QueueVec<Data>(QueueVec<Data> &&queue) noexcept : Vector<Data>(std::move(queue)) {
-            front = queue.front;
-            rear = queue.rear;
-            queue.Clear();
+        inline QueueVec<Data>(QueueVec<Data> &&queue) noexcept: Vector<Data>::Vector(std::move(queue)) {
+            //std::cout << "QueueVec<Data> Move constructor, queue parameter: " << std::endl;
+
+            std::swap(front, queue.front);
+            std::swap(rear, queue.rear);
+
+            //std::cout << "Stampo Envs di this" << std::endl;
+
+            //PrintEnvs();
         }
 
         /* ************************************************************************ */
@@ -121,7 +154,9 @@ namespace lasd {
         virtual inline bool Empty() const noexcept override { return front == -1 && rear == -1; }
 
         // Override Container member
-        virtual inline unsigned long Size() const noexcept override { return QueueLength(); }
+        virtual inline unsigned long Size() const noexcept override {
+            //PrintEnvs();
+            return QueueLength(); }
 
         /* ************************************************************************ */
 
@@ -131,8 +166,8 @@ namespace lasd {
         inline void Clear() noexcept override {
             front = -1;
             rear = -1;
-            Vector<Data>::Clear();
-            elements = new Data[chunkSize];
+            /*Vector<Data>::Clear();
+            elements = new Data[chunkSize];*/
         }
 
         // Override ResizableContainer member

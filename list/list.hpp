@@ -16,6 +16,12 @@ namespace lasd {
 
     template<typename Data>
     class List : virtual public ClearableContainer, virtual public LinearContainer<Data>, virtual public DictionaryContainer<Data> {
+     private:
+        inline void ChangeSize(int i) {
+            this->size += i;
+            if(this->size == 1) tail = head;
+            if(this->size == 0) tail = head = nullptr;
+        }
 
      protected:
         using Container::size;
@@ -50,7 +56,7 @@ namespace lasd {
 
             // operator!=(argument) specifiers;
             inline bool operator!=(const Node &n) const noexcept {
-                return !(n.operator==(*this));
+                return !(this->operator==(n));
             }
 
             /* ********************************************************************** */
@@ -90,15 +96,21 @@ namespace lasd {
 
         // Copy constructor
         inline List<Data>(const List<Data> &l) noexcept {
-            this->operator=(l);
+            //std::cout << "Invocato costruttore List<Data> const" << std::endl << std::endl;
+            //std::cout << "l.Size: " << l.Size() << std::endl;
+            //std::cout << "l.List<Data>::Size: " << l.List<Data>::Size() << std::endl;
+            //std::cout << "l is empty? " << (l.Empty() == 1?"Yes" : "No") << std::endl;
+            if(l.Empty()) return;
+            l.Traverse([this](const Data &val) {
+                //std::cout << "Inserting at Front " << val << std::endl;
+                this->InsertAtBack(val); });
         };
 
         // Move constructor
         inline List<Data>(List<Data> &&l) noexcept {
-            head = l.head;
-            tail = l.tail;
-            l.head = nullptr;
-            l.tail = nullptr;
+            std::swap(head, l.head);
+            std::swap(tail, l.tail);
+            std::swap(size, l.size);
         };
 
         /* ************************************************************************ */
@@ -146,6 +158,9 @@ namespace lasd {
         // Specific member function (inherited from ClearableContainer)
 
         virtual void Clear() noexcept override;
+
+        // Specific member function (inherited from TestableContainer)
+        virtual bool Exists(const Data&) const noexcept override;
 
         // Specific member functions (inherited from DictionaryContainer)
 
@@ -218,6 +233,21 @@ namespace lasd {
         // Specific member function (inherited from PostOrderMappableContainer)
 
         virtual void PostOrderMap(MapFun) override;
+
+        /*virtual inline void PrintAll() const {
+            if(Empty()) {
+                //std::cout << "PRINT ALL - Empty list" << std::endl;
+                return;
+            }
+
+            //std::cout << "Printing list " << this << " of size " << Size() << std::endl;
+            unsigned long int i = 0;
+            for(Node* w = head; w != nullptr; w = w->next) {
+                //std::cout << "Ele " << i++ << ": " << w->data << std::endl;
+            }
+
+            //std::cout << std::endl;
+        }*/
 
      protected:
         // Auxiliary functions

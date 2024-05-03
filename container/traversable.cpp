@@ -16,10 +16,10 @@ namespace lasd {
 
     template<typename Data>
     template<typename Accumulator>
-    Accumulator TraversableContainer<Data>::Fold(FoldFun<Accumulator> foldFun, const Accumulator &init) const {
+    Accumulator TraversableContainer<Data>::Fold(FoldFun<Accumulator> foldFun, Accumulator init) const {
         Accumulator acc = init;
-        Traverse([&acc, &foldFun](const typename TraversableContainer<Data>::Data &data) {
-            acc = foldFun(acc, data);
+        Traverse([&acc, &foldFun](const Data &data) {
+            acc = foldFun(data, acc);
         });
         return acc;
     }
@@ -31,12 +31,12 @@ namespace lasd {
 
     template<typename Data>
     template<typename Accumulator>
-    Accumulator PreOrderTraversableContainer<Data>::PreOrderFold(FoldFun<Accumulator> fun, const Accumulator &acc) const {
+    Accumulator PreOrderTraversableContainer<Data>::PreOrderFold(FoldFun<Accumulator> funFold, Accumulator acc) const {
         //std::cout << "ATTENZIONE CHIAMO PreOrderTraversableContainer<Data>::PreOrderFold (size: " << this->Size() << ")" << std::endl;
         Accumulator accumulator = acc;
-        PreOrderTraverse([&fun, &accumulator](const Data &data) {
+        PreOrderTraverse([&funFold, &accumulator](const Data &data) {
             //std::cout << "ATTENZIONE accumulator prima: " << accumulator << std::endl;
-            accumulator = fun(data, accumulator);
+            accumulator = funFold(data, accumulator);
             //std::cout << "ATTENZIONE accumulator dopo: " << accumulator << std::endl;
         });
         return accumulator;
@@ -66,7 +66,7 @@ namespace lasd {
     Accumulator InOrderTraversableContainer<Data>::InOrderFold(FoldFun<Accumulator> foldFun, const Accumulator &init) const {
         Accumulator accumulator = init;
         Traverse([&foldFun, &accumulator](const Data &data) {
-            accumulator = foldFun(accumulator, data);
+            accumulator = foldFun(data, accumulator);
         });
         return accumulator;
     }
@@ -80,7 +80,7 @@ namespace lasd {
     Accumulator BreadthTraversableContainer<Data>::BreadthFold(FoldFun<Accumulator> foldFun, const Accumulator &init) const {
         Accumulator accumulator = init;
         Traverse([&foldFun, &accumulator](const Data &data) {
-            accumulator = foldFun(accumulator, data);
+            accumulator = foldFun(data, accumulator);
         });
         return accumulator;
     }
