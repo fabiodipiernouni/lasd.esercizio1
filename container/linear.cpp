@@ -1,4 +1,5 @@
 #include "mappable.hpp"
+#include <stdexcept>
 
 namespace lasd {
 
@@ -26,6 +27,7 @@ namespace lasd {
 
     template<typename Data>
     Data &LinearContainer<Data>::Front() {
+        //std::cout << std::endl << "Called Front" << std::endl;
         if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no front element");
 
@@ -34,6 +36,7 @@ namespace lasd {
 
     template<typename Data>
     const Data &LinearContainer<Data>::Front() const {
+        //std::cout << std::endl << "Called Front const" << std::endl;
         if (this->Size() == 0)
             throw std::length_error("The container is empty, there is no front element");
 

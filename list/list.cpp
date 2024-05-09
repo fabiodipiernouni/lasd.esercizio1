@@ -181,25 +181,29 @@ namespace lasd {
     template<typename Data>
     bool List<Data>::Insert(Data &&val) {
         if(!Exists(val)) {
+            //std::cout << val << " not exists, inserting..." << std::endl;
             InsertAtBack(std::move(val));
             return true;
         }
 
+        //std::cout << val << "exists, returning false..." << std::endl;
         return false;
     }
 
     template<typename Data>
     bool List<Data>::Remove(const Data &val) {
         //std::cout << "Invocata Remove const." << std::endl;
-        if (Empty()) { return false; }
+        if (Empty()) {
+            //std::cout << "Empty list, returning false." << std::endl;
+            return false; }
 
         if (head->data == val) {
-            //std::cout << "Valore da rimuovere è in testa." << std::endl;
+            //std::cout << "Valore" << val << " da rimuovere è in testa." << std::endl;
             RemoveFromFront();
             return true;
         }
 
-        //std::cout << "Find del value da rimuovere." << std::endl;
+        std::cout << "Find del value da rimuovere." << std::endl;
 
         Node *temp = head;
         while (temp->next != nullptr) {
@@ -231,6 +235,7 @@ namespace lasd {
             temp = temp->next;
         }
 
+        std::cout << val << " non trovato, returning false." << std::endl;
         return false;
     }
 

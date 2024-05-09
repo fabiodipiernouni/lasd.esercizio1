@@ -176,6 +176,12 @@ namespace lasd {
         // Move assignment
         inline SortableVector<Data> &operator=(SortableVector<Data> &&) noexcept;
 
+        /* ************************************************************************ */
+
+        inline void SetCompareFunction(ComparisonFunction compareDataFunction) {
+            compare = compareDataFunction;
+        }
+
      protected:
         // Auxiliary functions
         virtual inline int DataComparison(const Data &dataLeft, const Data &dataRight) const override {

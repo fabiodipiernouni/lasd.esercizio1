@@ -15,7 +15,11 @@ namespace lasd {
     bool DictionaryContainer<Data>::InsertAll(MappableContainer<Data>&& c)
     {
         bool b {true};
-        c.Map([this, &b](Data& d) { b &= Insert(std::move(d)); });
+        c.Map([this, &b](Data& d) {
+            //std::cout << "Inserting " << d << std::endl;
+            b &= Insert(std::move(d));
+            //std::cout << "b is " << (b?"true":"false") << std::endl;
+        });
         return b;
     }
 
