@@ -4,94 +4,99 @@
 
 /* ************************************************************************** */
 
-#include "../queue.hpp"
 #include "../../list/list.hpp"
+#include "../queue.hpp"
 
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-template <typename Data>
-class QueueLst {
-  // Must extend Queue<Data>,
-  //             List<Data>
+    template<typename Data>
+    class QueueLst : virtual public Queue<Data>, virtual protected List<Data> {
 
-private:
+     public:
+        // Default constructor
+        inline QueueLst<Data>() = default;
 
-  // ...
+        /* ************************************************************************ */
 
-protected:
+        // Specific constructor
+        // A stack obtained from a TraversableContainer
+        inline QueueLst(const TraversableContainer<Data> &tc) : Queue<Data>(), List<Data>(tc){};
+        // A stack obtained from a MappableContainer
+        inline QueueLst(MappableContainer<Data> &&mc) : Queue<Data>(), List<Data>(std::move(mc)){};
 
-  // using List<Data>::???;
+        /* ************************************************************************ */
 
-  // ...
+        // Copy constructor
+        inline QueueLst(const QueueLst<Data> &queue) : Queue<Data>(), List<Data>(queue){};
 
-public:
+        // Move constructor
+        inline QueueLst(QueueLst<Data> &&queue) noexcept : Queue<Data>(), List<Data>(std::move(queue)){};
 
-  // Default constructor
-  // QueueLst() specifier;
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Destructor
+        // ~QueueLst() specifier;
+        virtual ~QueueLst() = default;
 
-  // Specific constructor
-  // QueueLst(argument) specifiers; // A stack obtained from a TraversableContainer
-  // QueueLst(argument) specifiers; // A stack obtained from a MappableContainer
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Copy assignment
+        virtual inline QueueLst<Data> &operator=(const QueueLst<Data> &queue) {
+            List<Data>::operator=(queue);
+            return *this;
+        };
 
-  // Copy constructor
-  // QueueLst(argument);
+        // Move assignment
+        virtual inline QueueLst<Data> &operator=(QueueLst<Data> && queue) noexcept {
+            List<Data>::operator=(std::move(queue));
+            return *this;
+        };
 
-  // Move constructor
-  // QueueLst(argument);
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Comparison operators
+        virtual bool operator==(const QueueLst<Data> & queue) const noexcept {
+            return List<Data>::operator==(queue);
+        };
 
-  // Destructor
-  // ~QueueLst() specifier;
+        virtual bool operator!=(const QueueLst<Data> & queue) const noexcept {
+            return List<Data>::operator!=(queue);
+        };
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Copy assignment
-  // type operator=(argument);
+        // Specific member functions (inherited from Queue)
 
-  // Move assignment
-  // type operator=(argument);
+        // throw std::length_error when empty
+        virtual inline const Data &Head() const override;
+        // throw std::length_error when empty
+        virtual inline Data &Head() override ;
+        // throw std::length_error when empty
+        virtual inline void Dequeue() override;
+        // throw std::length_error when empty
+        virtual inline Data HeadNDequeue() override;
 
-  /* ************************************************************************ */
+        // Override Queue member (copy of the value)
+        virtual inline void Enqueue(const Data & val) override {
+            List<Data>::InsertAtBack(val);
+        };
+        // Override Queue member (move of the value)
+        virtual void Enqueue(Data && val) override {
+            List<Data>::InsertAtBack(std::move(val));
+        }
+        /* ************************************************************************ */
 
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+        // Specific member function (inherited from ClearableContainer)
+        using List<Data>::Clear;
+    };
 
-  /* ************************************************************************ */
+    /* ************************************************************************** */
 
-  // Specific member functions (inherited from Queue)
-
-  // type Head() specifiers; // Override Queue member (non-mutable version; must throw std::length_error when empty)
-  // type Head() specifiers; // Override Queue member (mutable version; must throw std::length_error when empty)
-  // type Dequeue() specifiers; // Override Queue member (must throw std::length_error when empty)
-  // type HeadNDequeue() specifiers; // Override Queue member (must throw std::length_error when empty)
-  // type Enqueue(argument) specifiers; // Override Queue member (copy of the value)
-  // type Enqueue(argument) specifiers; // Override Queue member (move of the value)
-
-  /* ************************************************************************ */
-
-  // Specific member function (inherited from ClearableContainer)
-
-  // using List<Data>::Clear;
-
-protected:
-
-  // Auxiliary functions, if necessary!
-
-};
-
-/* ************************************************************************** */
-
-}
+}// namespace lasd
 
 #include "queuelst.cpp"
 

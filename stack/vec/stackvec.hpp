@@ -1,105 +1,141 @@
-
 #ifndef STACKVEC_HPP
 #define STACKVEC_HPP
 
 /* ************************************************************************** */
 
-#include "../stack.hpp"
 #include "../../vector/vector.hpp"
+#include "../stack.hpp"
+
+#define CHUNKSIZE 32
 
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
-template <typename Data>
-class StackVec {
-  // Must extend Stack<Data>,
-  //             Vector<Data>
+    template<typename Data>
+    class StackVec : virtual public Stack<Data>, virtual protected Vector<Data> {
 
-private:
+     private:
+        const unsigned long int chunkSize = CHUNKSIZE;
 
-  // ...
+     protected:
+        using Vector<Data>::elements;
 
-protected:
+        long int top = -1;
 
-  // using Vector<Data>::???;
+     public:
+        // Default constructor
+        StackVec() : Vector<Data>(CHUNKSIZE){};
 
-  // ...
+        /* ************************************************************************ */
 
-public:
+        // Specific constructor
 
-  // Default constructor
-  // StackVec() specifier;
+        // A stack obtained from a TraversableContainer
+        StackVec(const TraversableContainer<Data> &);
 
-  /* ************************************************************************ */
+        // A stack obtained from a MappableContainer
+        StackVec(MappableContainer<Data> &&);
 
-  // Specific constructor
-  // StackVec(argument) specifiers; // A stack obtained from a TraversableContainer
-  // StackVec(argument) specifiers; // A stack obtained from a MappableContainer
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Copy constructor
+        inline StackVec(const StackVec<Data> &stack) : Vector<Data>(stack) {
+            top = stack.top;
+        }
 
-  // Copy constructor
-  // StackVec(argument);
+        // Move constructor
+        inline StackVec(StackVec<Data> &&stack) noexcept : Vector<Data>(std::move(stack)) {
+            top = stack.top;
+            stack.Clear();
+        }
 
-  // Move constructor
-  // StackVec(argument);
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Destructor
+        virtual ~StackVec() = default;
 
-  // Destructor
-  // ~StackVec() specifier;
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Copy assignment
+        virtual StackVec<Data> & operator=(const StackVec<Data> &) noexcept;
 
-  // Copy assignment
-  // type operator=(argument);
+        // Move assignment
+        virtual StackVec<Data> & operator=(StackVec<Data> &&) noexcept;
 
-  // Move assignment
-  // type operator=(argument);
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Comparison operators
+        bool operator==(const StackVec<Data> &) const noexcept;
+        inline bool operator!=(const StackVec<Data> &stack) const noexcept { return !operator==(stack); };
 
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific member functions (inherited from Stack)
 
-  // Specific member functions (inherited from Stack)
+        // Override Stack member (non-mutable version; throw std::length_error when empty)
+        virtual inline const Data &Top() const override {
+            if(Empty()) throw std::length_error("Stack is empty");
+            return Vector<Data>::operator[](top);
+        };
+        // Override Stack member (mutable version; throw std::length_error when empty)
+        virtual inline Data &Top() override {
+            if(Empty()) throw std::length_error("Stack is empty");
+            return Vector<Data>::operator[](top);
+        };
+        // Override Stack member (throw std::length_error when empty)
+        virtual inline void Pop() override;
+        // Override Stack member (throw std::length_error when empty)
+        virtual inline Data TopNPop() override {
+            if(Empty()) throw std::length_error("Stack is empty");
+            Data temp = Top();
+            Pop();
+            return temp;
+        };
 
-  // type Top() specifiers; // Override Stack member (non-mutable version; must throw std::length_error when empty)
-  // type Top() specifiers; // Override Stack member (non-mutable version; must throw std::length_error when empty)
-  // type Pop() specifiers; // Override Stack member (must throw std::length_error when empty)
-  // type TopNPop() specifiers; // Override Stack member (must throw std::length_error when empty)
-  // type Push(argument) specifiers; // Override Stack member (copy of the value)
-  // type Push(argument) specifiers; // Override Stack member (move of the value)
+        // Override Stack member (copy of the value)
+        virtual void Push(const Data &) override;
 
-  /* ************************************************************************ */
+        // Override Stack member (move of the value)
+        virtual void Push(Data &&) override;
 
-  // Specific member functions (inherited from Container)
+        /* ************************************************************************ */
 
-  // type Empty() specifiers; // Override Container member
+        // Specific member functions (inherited from Container)
 
-  // type Size() specifiers; // Override Container member
+        // Override Container member
+        virtual inline bool Empty() const noexcept override { return top == -1; };
 
-  /* ************************************************************************ */
+        // Override Container member
+        virtual inline unsigned long Size() const noexcept override { return top + 1; };
 
-  // Specific member function (inherited from ClearableContainer)
+        /* ************************************************************************ */
 
-  // type Clear() specifiers; // Override ClearableContainer member
+        // Specific member function (inherited from ClearableContainer)
 
-protected:
+        // Override ClearableContainer member
+        virtual inline void Clear() noexcept override { top = -1; };
 
-  // Auxiliary functions, if necessary!
+        // Override ResizableContainer member
+        virtual void Resize(const unsigned long newSize) noexcept override;
 
-};
+        //virtual inline void PrintAll(long int max = -1) const override {
+            //std::cout << "Printing stackVec, top: " << top << std::endl;
 
-/* ************************************************************************** */
+          //  Vector<Data>::PrintAll(this->Size());
+        //}
 
-}
+     protected:
+        // Auxiliary functions, if necessary!
+        inline unsigned long int RealSize() const noexcept { return this->size; };
+        inline bool Full() const noexcept { return top == (long)((this->RealSize() - 1)); };
+    };
+
+    /* ************************************************************************** */
+
+}// namespace lasd
 
 #include "stackvec.cpp"
 

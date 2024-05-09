@@ -5,193 +5,261 @@
 /* ************************************************************************** */
 
 #include "../container/container.hpp"
-#include "../container/linear.hpp"
 #include "../container/dictionary.hpp"
+#include "../container/linear.hpp"
 
 /* ************************************************************************** */
 
 namespace lasd {
 
-/* ************************************************************************** */
+    /* ************************************************************************** */
+
+    template<typename Data>
+    class List : virtual public ClearableContainer, virtual public LinearContainer<Data>, virtual public DictionaryContainer<Data> {
+     private:
+        inline void ChangeSize(int i) {
+            this->size += i;
+            if(this->size == 1) tail = head;
+            if(this->size == 0) tail = head = nullptr;
+        }
+
+     protected:
+        using Container::size;
+
+        struct Node {
+
+            Data data;
+            Node *next;
+
+            inline Node(const Data &val, Node *n = nullptr) : data(val), next(n) {}
+            inline Node(Data &&val, Node *n = nullptr) noexcept : data(std::move(val)), next(n) {}
+
+            /* ********************************************************************** */
 
-template <typename Data>
-class List {
-  // Must extend ClearableContainer,
-  //             LinearContainer<Data>,
-  //             DictionaryContainer<Data>
+            /* ********************************************************************** */
 
-private:
+            // Destructor
+            virtual ~Node() {
+                if (next != nullptr) {
+                    delete next;
+                }
+            };
 
-  // ...
+            /* ********************************************************************** */
 
-protected:
+            // Comparison operators
 
-  // using Container::???;
+            // operator==(argument) specifiers;
+            inline bool operator==(const Node &n) const noexcept {
+                return data == n.data;
+            }
 
-  struct Node {
+            // operator!=(argument) specifiers;
+            inline bool operator!=(const Node &n) const noexcept {
+                return !(this->operator==(n));
+            }
 
-    // Data
-    // ...
+            /* ********************************************************************** */
 
-    /* ********************************************************************** */
+            // Specific member functions
 
-    // Specific constructors
-    // ...
+            inline Node &operator=(const Node &n) noexcept {
+                if (this != &n) {
+                    data = n.data;
+                    next = n.next;
+                }
+                return *this;
+            }
 
-    /* ********************************************************************** */
+            inline Node &operator=(Node &&n) noexcept {
+                if (this != &n) {
+                    data = std::move(n.data);
+                    next = n.next;
+                    n.next = nullptr;
+                }
+                return *this;
+            }
+        };
 
-    // Copy constructor
-    // ...
+        Node *head = nullptr;
+        Node *tail = nullptr;
 
-    // Move constructor
-    // ...
+     public:
+        // Default constructor
+        inline List<Data>() = default;
 
-    /* ********************************************************************** */
+        // Specific constructor
+        inline List(const TraversableContainer<Data>&);
+        inline List(MappableContainer<Data>&&);
 
-    // Destructor
-    // ...
+        /* ************************************************************************ */
 
-    /* ********************************************************************** */
+        // Copy constructor
+        inline List<Data>(const List<Data> &l) noexcept {
+            //std::cout << "Invocato costruttore List<Data> const" << std::endl << std::endl;
+            //std::cout << "l.Size: " << l.Size() << std::endl;
+            //std::cout << "l.List<Data>::Size: " << l.List<Data>::Size() << std::endl;
+            //std::cout << "l is empty? " << (l.Empty() == 1?"Yes" : "No") << std::endl;
+            if(l.Empty()) return;
+            l.Traverse([this](const Data &val) {
+                //std::cout << "Inserting at Front " << val << std::endl;
+                this->InsertAtBack(val); });
+        };
 
-    // Comparison operators
-    // ...
+        // Move constructor
+        inline List<Data>(List<Data> &&l) noexcept {
+            std::swap(head, l.head);
+            std::swap(tail, l.tail);
+            std::swap(size, l.size);
+        };
 
-    /* ********************************************************************** */
+        /* ************************************************************************ */
 
-    // Specific member functions
+        // Destructor
+        inline ~List() { this->Clear(); };
 
-    // ...
+        /* ************************************************************************ */
 
-  };
+        // Copy assignment
+        virtual List<Data> operator=(const List<Data> &l) noexcept;
 
-  // ...
+        // Move assignment
+        virtual List<Data> operator=(List<Data> &&l) noexcept;
 
-public:
+        /* ************************************************************************ */
 
-  // Default constructor
-  // List() specifiers;
+        // Comparison operators
+        bool operator==(const List<Data> &l) const noexcept;
+        bool operator!=(const List<Data> &l) const noexcept;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Specific constructor
-  // List(argument) specifiers; // A list obtained from a TraversableContainer
-  // List(argument) specifiers; // A list obtained from a MappableContainer
+        // Specific member functions
 
-  /* ************************************************************************ */
+        // Copy of the value
+        virtual void InsertAtFront(const Data &);
+        // Move of the value
+        virtual void InsertAtFront(Data &&);
 
-  // Copy constructor
-  // List(argument) specifiers;
+        // throw std::length_error when empty
+        virtual void RemoveFromFront();
 
-  // Move constructor
-  // List(argument) specifiers;
+        // throw std::length_error when empty
+        virtual Data FrontNRemove();
 
-  /* ************************************************************************ */
+        // // Copy of the value
+        virtual void InsertAtBack(const Data &val);
 
-  // Destructor
-  // ~List() specifiers;
+        // // Move of the value
+        virtual void InsertAtBack(Data &&val);
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Copy assignment
-  // type operator=(argument) specifiers;
+        // Specific member function (inherited from ClearableContainer)
 
-  // Move assignment
-  // type operator=(argument) specifiers;
+        virtual void Clear() noexcept override;
 
-  /* ************************************************************************ */
+        // Specific member function (inherited from TestableContainer)
+        virtual bool Exists(const Data&) const noexcept override;
 
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+        // Specific member functions (inherited from DictionaryContainer)
 
-  /* ************************************************************************ */
+        // Copy of the value
+        virtual bool Insert(const Data &val) override;
 
-  // Specific member functions
+        // Move of the value
+        virtual bool Insert(Data &&) override;
 
-  // type InsertAtFront(argument) specifier; // Copy of the value
-  // type InsertAtFront(argument) specifier; // Move of the value
-  // type RemoveFromFront() specifier; // (must throw std::length_error when empty)
-  // type FrontNRemove() specifier; // (must throw std::length_error when empty)
+        virtual bool Remove(const Data &) override;
 
-  // type InsertAtBack(argument) specifier; // Copy of the value
-  // type InsertAtBack(argument) specifier; // Move of the value
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific member functions (inherited from LinearContainer)
 
-  // Specific member function (inherited from ClearableContainer)
+        // throw std::out_of_range when out of range
+        virtual const Data &operator[](const unsigned long) const override;
 
-  // type Clear() specifiers; // Override ClearableContainer member
+        // throw std::out_of_range when out of range
+        virtual Data &operator[](const unsigned long) override;
 
-  /* ************************************************************************ */
+        // throw std::length_error when empty
+        virtual const Data &Front() const override;
 
-  // Specific member functions (inherited from DictionaryContainer)
+        // throw std::length_error when empty
+        virtual Data &Front() override;
 
-  // type Insert(argument) specifier; // Copy of the value
-  // type Insert(argument) specifier; // Move of the value
-  // type Remove(argument) specifier;
+        // throw std::length_error when empty
+        virtual const Data &Back() const override;
 
-  /* ************************************************************************ */
+        // throw std::length_error when empty
+        virtual Data &Back() override;
 
-  // Specific member functions (inherited from LinearContainer)
+        /* ************************************************************************ */
 
-  // type operator[](argument) specifiers; // Override (NonMutable) LinearContainer member (must throw std::out_of_range when out of range)
-  // type operator[](argument) specifiers; // Override (Mutable) LinearContainer member (must throw std::out_of_range when out of range)
+        // Specific member function (inherited from TraversableContainer)
 
-  // type Front() specifiers; // Override (NonMutable) LinearContainer member (must throw std::length_error when empty)
-  // type Front() specifiers; // Override (Mutable) LinearContainer member (must throw std::length_error when empty)
+        using typename TraversableContainer<Data>::TraverseFun;
 
-  // type Back() specifiers; // Override (NonMutable) LinearContainer member (must throw std::length_error when empty)
-  // type Back() specifiers; // Override (Mutable) LinearContainer member (must throw std::length_error when empty)
+        virtual void Traverse(TraverseFun) const override;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Specific member function (inherited from TraversableContainer)
+        // Specific member function (inherited from PreOrderTraversableContainer)
 
-  // using typename TraversableContainer<Data>::TraverseFun;
+        virtual void PreOrderTraverse(TraverseFun) const override;
 
-  // type Traverse(arguments) specifiers; // Override TraversableContainer member
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific member function (inherited from PostOrderTraversableContainer)
 
-  // Specific member function (inherited from PreOrderTraversableContainer)
+        virtual void PostOrderTraverse(TraverseFun) const override;
 
-  // type PreOrderTraverse(arguments) specifiers; // Override PreOrderTraversableContainer member
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific member function (inherited from MappableContainer)
 
-  // Specific member function (inherited from PostOrderTraversableContainer)
+        using typename MappableContainer<Data>::MapFun;
 
-  // type PostOrderTraverse(arguments) specifiers; // Override PostOrderTraversableContainer member
+        virtual void Map(MapFun) override;
 
-  /* ************************************************************************ */
+        /* ************************************************************************ */
 
-  // Specific member function (inherited from MappableContainer)
+        // Specific member function (inherited from PreOrderMappableContainer)
 
-  // using typename MappableContainer<Data>::MapFun;
+        virtual void PreOrderMap(MapFun) override;
 
-  // type Map(argument) specifiers; // Override MappableContainer member
+        /* ************************************************************************ */
 
-  /* ************************************************************************ */
+        // Specific member function (inherited from PostOrderMappableContainer)
 
-  // Specific member function (inherited from PreOrderMappableContainer)
+        virtual void PostOrderMap(MapFun) override;
 
-  // type PreOrderMap(argument) specifiers; // Override PreOrderMappableContainer member
+        /*virtual inline void PrintAll() const {
+            if(Empty()) {
+                //std::cout << "PRINT ALL - Empty list" << std::endl;
+                return;
+            }
 
-  /* ************************************************************************ */
+            //std::cout << "Printing list " << this << " of size " << Size() << std::endl;
+            unsigned long int i = 0;
+            for(Node* w = head; w != nullptr; w = w->next) {
+                //std::cout << "Ele " << i++ << ": " << w->data << std::endl;
+            }
 
-  // Specific member function (inherited from PostOrderMappableContainer)
+            //std::cout << std::endl;
+        }*/
 
-  // type PostOrderMap(argument) specifiers; // Override PostOrderMappableContainer member
+     protected:
+        // Auxiliary functions
+        void Traverse(TraverseFun, Node*) const;
+        void PostOrderTraverse(TraverseFun, Node*) const;
+        void Map(MapFun, Node*);
+        void PostOrderMap(MapFun, Node*);
+    };
 
-protected:
+    /* ************************************************************************** */
 
-  // Auxiliary functions, if necessary!
-
-};
-
-/* ************************************************************************** */
-
-}
+}// namespace lasd
 
 #include "list.cpp"
 
